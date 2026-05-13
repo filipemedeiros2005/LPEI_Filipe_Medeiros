@@ -1,0 +1,23 @@
+[Log] A gravar execucao em: C:\Users\filip\Desktop\Projeto\bin\Debug\net8.0\logs\Producer-Consumer_20260420_170724.txt
+Producer-Consumer (1 produtor, 1 consumidor, buffer limitado)
+[Produtor] produziu 1. Buffer=1/5
+[Consumidor] consumiu 1. Buffer=0/5
+[Produtor] produziu 2. Buffer=1/5
+[Consumidor] consumiu 2. Buffer=0/5
+[Produtor] produziu 3. Buffer=1/5
+[Produtor] produziu 4. Buffer=2/5
+[Consumidor] consumiu 3. Buffer=1/5
+[Produtor] produziu 5. Buffer=2/5
+[Consumidor] consumiu 4. Buffer=1/5
+[Produtor] produziu 6. Buffer=2/5
+[Produtor] produziu 7. Buffer=3/5
+[Consumidor] consumiu 5. Buffer=2/5
+[Produtor] produziu 8. Buffer=3/5
+[Consumidor] consumiu 6. Buffer=2/5
+[Produtor] produziu 9. Buffer=3/5
+[Produtor] produziu 10. Buffer=4/5
+[Consumidor] consumiu 7. Buffer=3/5
+[Consumidor] consumiu 8. Buffer=2/5
+[Consumidor] consumiu 9. Buffer=1/5
+[Consumidor] consumiu 10. Buffer=0/5
+Fim do cenario Producer-Consumer.

@@ -1,0 +1,90 @@
+﻿[17:16:42.572] === Inicio do cenario Dining Philosophers ===
+[17:16:42.572] Arquitetura do sistema:
+[17:16:42.572] - 5 filosofos (threads) alternam entre pensar e comer.
+[17:16:42.573] - 5 garfos (locks) representam recursos exclusivos partilhados.
+[17:16:42.574] - Cada filosofo precisa de 2 garfos adjacentes para comer.
+[17:16:42.574] Estrategia de prevencao de deadlock:
+[17:16:42.575] - Filosofos 0..3 apanham primeiro o garfo esquerdo e depois o direito.
+[17:16:42.575] - O ultimo filosofo (id=4) inverte a ordem para quebrar espera circular.
+[17:16:42.576] Inicializacao: todos os filosofos vao arrancar em paralelo.
+[17:16:42.579] [Filosofo 0] ronda=1: estado=PENSAR.
+[17:16:42.579] [Filosofo 1] ronda=1: estado=PENSAR.
+[17:16:42.579] [Filosofo 3] ronda=1: estado=PENSAR.
+[17:16:42.579] [Filosofo 2] ronda=1: estado=PENSAR.
+[17:16:42.579] [Filosofo 4] ronda=1: estado=PENSAR.
+[17:16:42.780] [Filosofo 0] ronda=1: tenta bloquear garfo esquerdo=0.
+[17:16:42.781] [Filosofo 0] ronda=1: bloqueou garfo esquerdo=0; tenta direito=1.
+[17:16:42.781] [Filosofo 0] ronda=1: estado=COMER (garfos 0 e 1).
+[17:16:42.796] [Filosofo 2] ronda=1: tenta bloquear garfo esquerdo=2.
+[17:16:42.796] [Filosofo 4] ronda=1: tenta bloquear garfo direito=0.
+[17:16:42.796] [Filosofo 3] ronda=1: tenta bloquear garfo esquerdo=3.
+[17:16:42.798] [Filosofo 3] ronda=1: bloqueou garfo esquerdo=3; tenta direito=4.
+[17:16:42.798] [Filosofo 3] ronda=1: estado=COMER (garfos 3 e 4).
+[17:16:42.796] [Filosofo 1] ronda=1: tenta bloquear garfo esquerdo=1.
+[17:16:42.797] [Filosofo 2] ronda=1: bloqueou garfo esquerdo=2; tenta direito=3.
+[17:16:42.997] [Filosofo 1] ronda=1: bloqueou garfo esquerdo=1; tenta direito=2.
+[17:16:42.997] [Filosofo 4] ronda=1: bloqueou garfo direito=0; tenta esquerdo=4.
+[17:16:42.997] [Filosofo 0] ronda=1: terminou e libertou ambos os garfos.
+[17:16:42.998] [Filosofo 0] ronda=2: estado=PENSAR.
+[17:16:43.012] [Filosofo 3] ronda=1: terminou e libertou ambos os garfos.
+[17:16:43.013] [Filosofo 3] ronda=2: estado=PENSAR.
+[17:16:43.013] [Filosofo 2] ronda=1: estado=COMER (garfos 2 e 3).
+[17:16:43.012] [Filosofo 4] ronda=1: estado=COMER (garfos 0 e 4).
+[17:16:43.213] [Filosofo 0] ronda=2: tenta bloquear garfo esquerdo=0.
+[17:16:43.227] [Filosofo 4] ronda=1: terminou e libertou ambos os garfos.
+[17:16:43.228] [Filosofo 4] ronda=2: estado=PENSAR.
+[17:16:43.227] [Filosofo 0] ronda=2: bloqueou garfo esquerdo=0; tenta direito=1.
+[17:16:43.228] [Filosofo 2] ronda=1: terminou e libertou ambos os garfos.
+[17:16:43.229] [Filosofo 2] ronda=2: estado=PENSAR.
+[17:16:43.227] [Filosofo 3] ronda=2: tenta bloquear garfo esquerdo=3.
+[17:16:43.229] [Filosofo 3] ronda=2: bloqueou garfo esquerdo=3; tenta direito=4.
+[17:16:43.230] [Filosofo 3] ronda=2: estado=COMER (garfos 3 e 4).
+[17:16:43.228] [Filosofo 1] ronda=1: estado=COMER (garfos 1 e 2).
+[17:16:43.430] [Filosofo 4] ronda=2: tenta bloquear garfo direito=0.
+[17:16:43.445] [Filosofo 1] ronda=1: terminou e libertou ambos os garfos.
+[17:16:43.446] [Filosofo 1] ronda=2: estado=PENSAR.
+[17:16:43.445] [Filosofo 2] ronda=2: tenta bloquear garfo esquerdo=2.
+[17:16:43.446] [Filosofo 2] ronda=2: bloqueou garfo esquerdo=2; tenta direito=3.
+[17:16:43.446] [Filosofo 2] ronda=2: estado=COMER (garfos 2 e 3).
+[17:16:43.445] [Filosofo 0] ronda=2: estado=COMER (garfos 0 e 1).
+[17:16:43.445] [Filosofo 3] ronda=2: terminou e libertou ambos os garfos.
+[17:16:43.447] [Filosofo 3] ronda=3: estado=PENSAR.
+[17:16:43.647] [Filosofo 1] ronda=2: tenta bloquear garfo esquerdo=1.
+[17:16:43.647] [Filosofo 2] ronda=2: terminou e libertou ambos os garfos.
+[17:16:43.648] [Filosofo 2] ronda=3: estado=PENSAR.
+[17:16:43.662] [Filosofo 3] ronda=3: tenta bloquear garfo esquerdo=3.
+[17:16:43.662] [Filosofo 3] ronda=3: bloqueou garfo esquerdo=3; tenta direito=4.
+[17:16:43.662] [Filosofo 3] ronda=3: estado=COMER (garfos 3 e 4).
+[17:16:43.662] [Filosofo 4] ronda=2: bloqueou garfo direito=0; tenta esquerdo=4.
+[17:16:43.662] [Filosofo 1] ronda=2: bloqueou garfo esquerdo=1; tenta direito=2.
+[17:16:43.662] [Filosofo 0] ronda=2: terminou e libertou ambos os garfos.
+[17:16:43.663] [Filosofo 0] ronda=3: estado=PENSAR.
+[17:16:43.663] [Filosofo 1] ronda=2: estado=COMER (garfos 1 e 2).
+[17:16:43.862] [Filosofo 2] ronda=3: tenta bloquear garfo esquerdo=2.
+[17:16:43.878] [Filosofo 3] ronda=3: terminou e libertou ambos os garfos.
+[17:16:43.879] [Filosofo 3] terminou todas as rondas.
+[17:16:43.878] [Filosofo 1] ronda=2: terminou e libertou ambos os garfos.
+[17:16:43.880] [Filosofo 1] ronda=3: estado=PENSAR.
+[17:16:43.878] [Filosofo 0] ronda=3: tenta bloquear garfo esquerdo=0.
+[17:16:43.878] [Filosofo 4] ronda=2: estado=COMER (garfos 0 e 4).
+[17:16:43.878] [Filosofo 2] ronda=3: bloqueou garfo esquerdo=2; tenta direito=3.
+[17:16:43.880] [Filosofo 2] ronda=3: estado=COMER (garfos 2 e 3).
+[17:16:44.080] [Filosofo 1] ronda=3: tenta bloquear garfo esquerdo=1.
+[17:16:44.082] [Filosofo 1] ronda=3: bloqueou garfo esquerdo=1; tenta direito=2.
+[17:16:44.096] [Filosofo 2] ronda=3: terminou e libertou ambos os garfos.
+[17:16:44.096] [Filosofo 2] terminou todas as rondas.
+[17:16:44.096] [Filosofo 1] ronda=3: estado=COMER (garfos 1 e 2).
+[17:16:44.096] [Filosofo 0] ronda=3: bloqueou garfo esquerdo=0; tenta direito=1.
+[17:16:44.096] [Filosofo 4] ronda=2: terminou e libertou ambos os garfos.
+[17:16:44.097] [Filosofo 4] ronda=3: estado=PENSAR.
+[17:16:44.298] [Filosofo 4] ronda=3: tenta bloquear garfo direito=0.
+[17:16:44.299] [Filosofo 1] ronda=3: terminou e libertou ambos os garfos.
+[17:16:44.300] [Filosofo 1] terminou todas as rondas.
+[17:16:44.299] [Filosofo 0] ronda=3: estado=COMER (garfos 0 e 1).
+[17:16:44.516] [Filosofo 0] ronda=3: terminou e libertou ambos os garfos.
+[17:16:44.516] [Filosofo 4] ronda=3: bloqueou garfo direito=0; tenta esquerdo=4.
+[17:16:44.517] [Filosofo 0] terminou todas as rondas.
+[17:16:44.517] [Filosofo 4] ronda=3: estado=COMER (garfos 0 e 4).
+[17:16:44.733] [Filosofo 4] ronda=3: terminou e libertou ambos os garfos.
+[17:16:44.734] [Filosofo 4] terminou todas as rondas.
+[17:16:44.735] === Fim do cenario Dining Philosophers ===

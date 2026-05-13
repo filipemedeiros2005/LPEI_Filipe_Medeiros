@@ -1,0 +1,28 @@
+﻿[17:17:03.383] === Inicio do cenario Barrier Synchronization ===
+[17:17:03.383] Arquitetura do sistema:
+[17:17:03.383] - 3 workers executam o trabalho em duas fases.
+[17:17:03.384] - Uma Barrier coordena o ponto de encontro ao fim de cada fase.
+[17:17:03.384] - Nenhuma thread avanca para a proxima fase sem sincronizacao global.
+[17:17:03.384] Algoritmo de coordenacao por fases:
+[17:17:03.384] 1) Cada worker executa fase 1 e chama SignalAndWait().
+[17:17:03.385] 2) A ultima thread a chegar desbloqueia todas para a fase seguinte.
+[17:17:03.387] 3) O processo repete-se para a fase 2.
+[17:17:03.387] Inicializacao: workers vao arrancar em paralelo e sincronizar por fases.
+[17:17:03.388] [Thread 1] fase 1: inicio de processamento.
+[17:17:03.388] [Thread 2] fase 1: inicio de processamento.
+[17:17:03.388] [Thread 3] fase 1: inicio de processamento.
+[17:17:03.677] [Thread 3] fase 1: concluida, a aguardar sincronizacao.
+[17:17:03.710] [Thread 1] fase 1: concluida, a aguardar sincronizacao.
+[17:17:03.862] [Thread 2] fase 1: concluida, a aguardar sincronizacao.
+[17:17:03.864] --- Todas as threads terminaram a fase 0. ---
+[17:17:03.865] [Thread 2] fase 2: inicio de processamento.
+[17:17:03.865] [Thread 1] fase 2: inicio de processamento.
+[17:17:03.865] [Thread 3] fase 2: inicio de processamento.
+[17:17:04.095] [Thread 3] fase 2: concluida, a aguardar sincronizacao final.
+[17:17:04.156] [Thread 2] fase 2: concluida, a aguardar sincronizacao final.
+[17:17:04.265] [Thread 1] fase 2: concluida, a aguardar sincronizacao final.
+[17:17:04.265] --- Todas as threads terminaram a fase 1. ---
+[17:17:04.266] [Thread 1] terminou todas as fases e saiu.
+[17:17:04.266] [Thread 3] terminou todas as fases e saiu.
+[17:17:04.266] [Thread 2] terminou todas as fases e saiu.
+[17:17:04.267] === Fim do cenario Barrier Synchronization ===

@@ -1,0 +1,125 @@
+﻿============================================================
+Scenario: Producer-Consumer
+Execution started: 2026-04-20 16:40:48.075
+============================================================
+Architecture overview:
+- Arquitetura: 1 thread produtora, 1 thread consumidora e um buffer partilhado com capacidade fixa.
+- Coordenacao: semaforos emptySlots/filledSlots fazem controlo de disponibilidade de espaco e itens.
+- Exclusao mutua: o semaforo mutex garante acesso exclusivo a estrutura Queue<int>.
+- Fluxo: produtor bloqueia quando o buffer esta cheio; consumidor bloqueia quando o buffer esta vazio.
+============================================================
+Detailed runtime timeline:
+[0001] 16:40:48.101 | T01 | Estado inicial: buffer=0/5, totalItems=10.
+[0002] 16:40:48.101 | T01 | Criacao dos semaforos concluida: mutex=1, emptySlots=bufferLimit, filledSlots=0.
+[0003] 16:40:48.101 | T01 | Threads do cenario criadas: produtor e consumidor.
+[0004] 16:40:48.102 | T04 | Thread produtora iniciada e pronta para produzir itens.
+[0005] 16:40:48.102 | T04 | [Produtor] item 1: a aguardar emptySlots (espaco disponivel no buffer).
+[0007] 16:40:48.102 | T04 | [Produtor] item 1: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0006] 16:40:48.102 | T01 | Threads produtor e consumidor arrancadas.
+[0008] 16:40:48.102 | T04 | [Produtor] item 1 produzido e inserido no buffer. Buffer=1/5.
+[0009] 16:40:48.102 | T04 | [Produtor] item 1: mutex libertado.
+[0010] 16:40:48.102 | T04 | [Produtor] item 1: sinalizou filledSlots para desbloquear consumidor.
+[0011] 16:40:48.102 | T05 | Thread consumidora iniciada e pronta para consumir itens.
+[0012] 16:40:48.102 | T05 | [Consumidor] iteracao 1: a aguardar filledSlots (item disponivel no buffer).
+[0013] 16:40:48.102 | T05 | [Consumidor] iteracao 1: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0014] 16:40:48.103 | T05 | [Consumidor] item 1 consumido e removido do buffer. Buffer=0/5.
+[0015] 16:40:48.103 | T05 | [Consumidor] iteracao 1: mutex libertado.
+[0016] 16:40:48.103 | T05 | [Consumidor] iteracao 1: sinalizou emptySlots para desbloquear produtor.
+[0017] 16:40:48.309 | T04 | [Produtor] item 2: a aguardar emptySlots (espaco disponivel no buffer).
+[0018] 16:40:48.309 | T04 | [Produtor] item 2: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0019] 16:40:48.309 | T04 | [Produtor] item 2 produzido e inserido no buffer. Buffer=1/5.
+[0020] 16:40:48.309 | T04 | [Produtor] item 2: mutex libertado.
+[0021] 16:40:48.309 | T04 | [Produtor] item 2: sinalizou filledSlots para desbloquear consumidor.
+[0022] 16:40:48.418 | T05 | [Consumidor] iteracao 2: a aguardar filledSlots (item disponivel no buffer).
+[0023] 16:40:48.418 | T05 | [Consumidor] iteracao 2: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0024] 16:40:48.418 | T05 | [Consumidor] item 2 consumido e removido do buffer. Buffer=0/5.
+[0025] 16:40:48.418 | T05 | [Consumidor] iteracao 2: mutex libertado.
+[0026] 16:40:48.418 | T05 | [Consumidor] iteracao 2: sinalizou emptySlots para desbloquear produtor.
+[0027] 16:40:48.511 | T04 | [Produtor] item 3: a aguardar emptySlots (espaco disponivel no buffer).
+[0028] 16:40:48.511 | T04 | [Produtor] item 3: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0029] 16:40:48.511 | T04 | [Produtor] item 3 produzido e inserido no buffer. Buffer=1/5.
+[0030] 16:40:48.511 | T04 | [Produtor] item 3: mutex libertado.
+[0031] 16:40:48.511 | T04 | [Produtor] item 3: sinalizou filledSlots para desbloquear consumidor.
+[0032] 16:40:48.725 | T04 | [Produtor] item 4: a aguardar emptySlots (espaco disponivel no buffer).
+[0034] 16:40:48.725 | T04 | [Produtor] item 4: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0035] 16:40:48.725 | T04 | [Produtor] item 4 produzido e inserido no buffer. Buffer=2/5.
+[0033] 16:40:48.725 | T05 | [Consumidor] iteracao 3: a aguardar filledSlots (item disponivel no buffer).
+[0036] 16:40:48.725 | T04 | [Produtor] item 4: mutex libertado.
+[0037] 16:40:48.725 | T04 | [Produtor] item 4: sinalizou filledSlots para desbloquear consumidor.
+[0038] 16:40:48.725 | T05 | [Consumidor] iteracao 3: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0039] 16:40:48.725 | T05 | [Consumidor] item 3 consumido e removido do buffer. Buffer=1/5.
+[0040] 16:40:48.725 | T05 | [Consumidor] iteracao 3: mutex libertado.
+[0041] 16:40:48.725 | T05 | [Consumidor] iteracao 3: sinalizou emptySlots para desbloquear produtor.
+[0042] 16:40:48.927 | T04 | [Produtor] item 5: a aguardar emptySlots (espaco disponivel no buffer).
+[0043] 16:40:48.927 | T04 | [Produtor] item 5: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0044] 16:40:48.927 | T04 | [Produtor] item 5 produzido e inserido no buffer. Buffer=2/5.
+[0045] 16:40:48.927 | T04 | [Produtor] item 5: mutex libertado.
+[0046] 16:40:48.927 | T04 | [Produtor] item 5: sinalizou filledSlots para desbloquear consumidor.
+[0047] 16:40:49.036 | T05 | [Consumidor] iteracao 4: a aguardar filledSlots (item disponivel no buffer).
+[0048] 16:40:49.036 | T05 | [Consumidor] iteracao 4: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0049] 16:40:49.036 | T05 | [Consumidor] item 4 consumido e removido do buffer. Buffer=1/5.
+[0050] 16:40:49.036 | T05 | [Consumidor] iteracao 4: mutex libertado.
+[0051] 16:40:49.036 | T05 | [Consumidor] iteracao 4: sinalizou emptySlots para desbloquear produtor.
+[0052] 16:40:49.142 | T04 | [Produtor] item 6: a aguardar emptySlots (espaco disponivel no buffer).
+[0053] 16:40:49.142 | T04 | [Produtor] item 6: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0054] 16:40:49.143 | T04 | [Produtor] item 6 produzido e inserido no buffer. Buffer=2/5.
+[0055] 16:40:49.143 | T04 | [Produtor] item 6: mutex libertado.
+[0056] 16:40:49.143 | T04 | [Produtor] item 6: sinalizou filledSlots para desbloquear consumidor.
+[0057] 16:40:49.343 | T04 | [Produtor] item 7: a aguardar emptySlots (espaco disponivel no buffer).
+[0059] 16:40:49.343 | T04 | [Produtor] item 7: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0058] 16:40:49.343 | T05 | [Consumidor] iteracao 5: a aguardar filledSlots (item disponivel no buffer).
+[0060] 16:40:49.343 | T04 | [Produtor] item 7 produzido e inserido no buffer. Buffer=3/5.
+[0062] 16:40:49.343 | T04 | [Produtor] item 7: mutex libertado.
+[0061] 16:40:49.343 | T05 | [Consumidor] iteracao 5: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0063] 16:40:49.343 | T04 | [Produtor] item 7: sinalizou filledSlots para desbloquear consumidor.
+[0064] 16:40:49.343 | T05 | [Consumidor] item 5 consumido e removido do buffer. Buffer=2/5.
+[0065] 16:40:49.343 | T05 | [Consumidor] iteracao 5: mutex libertado.
+[0066] 16:40:49.343 | T05 | [Consumidor] iteracao 5: sinalizou emptySlots para desbloquear produtor.
+[0067] 16:40:49.545 | T04 | [Produtor] item 8: a aguardar emptySlots (espaco disponivel no buffer).
+[0068] 16:40:49.545 | T04 | [Produtor] item 8: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0069] 16:40:49.545 | T04 | [Produtor] item 8 produzido e inserido no buffer. Buffer=3/5.
+[0070] 16:40:49.545 | T04 | [Produtor] item 8: mutex libertado.
+[0071] 16:40:49.545 | T04 | [Produtor] item 8: sinalizou filledSlots para desbloquear consumidor.
+[0072] 16:40:49.654 | T05 | [Consumidor] iteracao 6: a aguardar filledSlots (item disponivel no buffer).
+[0073] 16:40:49.654 | T05 | [Consumidor] iteracao 6: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0074] 16:40:49.654 | T05 | [Consumidor] item 6 consumido e removido do buffer. Buffer=2/5.
+[0075] 16:40:49.654 | T05 | [Consumidor] iteracao 6: mutex libertado.
+[0076] 16:40:49.654 | T05 | [Consumidor] iteracao 6: sinalizou emptySlots para desbloquear produtor.
+[0077] 16:40:49.761 | T04 | [Produtor] item 9: a aguardar emptySlots (espaco disponivel no buffer).
+[0078] 16:40:49.761 | T04 | [Produtor] item 9: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0079] 16:40:49.761 | T04 | [Produtor] item 9 produzido e inserido no buffer. Buffer=3/5.
+[0080] 16:40:49.761 | T04 | [Produtor] item 9: mutex libertado.
+[0081] 16:40:49.761 | T04 | [Produtor] item 9: sinalizou filledSlots para desbloquear consumidor.
+[0082] 16:40:49.962 | T04 | [Produtor] item 10: a aguardar emptySlots (espaco disponivel no buffer).
+[0083] 16:40:49.962 | T04 | [Produtor] item 10: emptySlots adquirido; a aguardar mutex para aceder ao buffer.
+[0084] 16:40:49.963 | T04 | [Produtor] item 10 produzido e inserido no buffer. Buffer=4/5.
+[0085] 16:40:49.963 | T04 | [Produtor] item 10: mutex libertado.
+[0086] 16:40:49.963 | T04 | [Produtor] item 10: sinalizou filledSlots para desbloquear consumidor.
+[0087] 16:40:49.963 | T05 | [Consumidor] iteracao 7: a aguardar filledSlots (item disponivel no buffer).
+[0088] 16:40:49.963 | T05 | [Consumidor] iteracao 7: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0089] 16:40:49.963 | T05 | [Consumidor] item 7 consumido e removido do buffer. Buffer=3/5.
+[0090] 16:40:49.963 | T05 | [Consumidor] iteracao 7: mutex libertado.
+[0091] 16:40:49.963 | T05 | [Consumidor] iteracao 7: sinalizou emptySlots para desbloquear produtor.
+[0092] 16:40:50.165 | T04 | Thread produtora terminou a producao de todos os itens.
+[0093] 16:40:50.165 | T01 | Join concluido para a thread produtora.
+[0094] 16:40:50.274 | T05 | [Consumidor] iteracao 8: a aguardar filledSlots (item disponivel no buffer).
+[0095] 16:40:50.274 | T05 | [Consumidor] iteracao 8: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0096] 16:40:50.274 | T05 | [Consumidor] item 8 consumido e removido do buffer. Buffer=2/5.
+[0097] 16:40:50.274 | T05 | [Consumidor] iteracao 8: mutex libertado.
+[0098] 16:40:50.274 | T05 | [Consumidor] iteracao 8: sinalizou emptySlots para desbloquear produtor.
+[0099] 16:40:50.586 | T05 | [Consumidor] iteracao 9: a aguardar filledSlots (item disponivel no buffer).
+[0100] 16:40:50.586 | T05 | [Consumidor] iteracao 9: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0101] 16:40:50.586 | T05 | [Consumidor] item 9 consumido e removido do buffer. Buffer=1/5.
+[0102] 16:40:50.586 | T05 | [Consumidor] iteracao 9: mutex libertado.
+[0103] 16:40:50.586 | T05 | [Consumidor] iteracao 9: sinalizou emptySlots para desbloquear produtor.
+[0104] 16:40:50.898 | T05 | [Consumidor] iteracao 10: a aguardar filledSlots (item disponivel no buffer).
+[0105] 16:40:50.898 | T05 | [Consumidor] iteracao 10: filledSlots adquirido; a aguardar mutex para aceder ao buffer.
+[0106] 16:40:50.898 | T05 | [Consumidor] item 10 consumido e removido do buffer. Buffer=0/5.
+[0107] 16:40:50.898 | T05 | [Consumidor] iteracao 10: mutex libertado.
+[0108] 16:40:50.898 | T05 | [Consumidor] iteracao 10: sinalizou emptySlots para desbloquear produtor.
+[0109] 16:40:51.207 | T05 | Thread consumidora terminou o consumo de todos os itens.
+[0110] 16:40:51.208 | T01 | Join concluido para a thread consumidora.
+[0111] 16:40:51.208 | T01 | Cenario Producer-Consumer concluido sem threads pendentes.
+============================================================
+Execution finished: 2026-04-20 16:40:51.208
+============================================================

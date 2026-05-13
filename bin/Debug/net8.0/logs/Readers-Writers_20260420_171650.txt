@@ -1,0 +1,82 @@
+﻿[17:16:50.097] === Inicio do cenario Readers-Writers ===
+[17:16:50.097] Arquitetura do sistema:
+[17:16:50.098] - Um escritor atualiza o estado partilhado com acesso exclusivo.
+[17:16:50.098] - Dois leitores consultam o estado de forma concorrente.
+[17:16:50.098] - readersCount rastreia quantos leitores estao ativos no momento.
+[17:16:50.098] - readersCountMutex protege a contabilizacao de leitores ativos.
+[17:16:50.099] - resourceAccess representa o lock do recurso partilhado.
+[17:16:50.099] Algoritmo usado:
+[17:16:50.099] 1) O primeiro leitor bloqueia o recurso para impedir escrita concorrente.
+[17:16:50.101] 2) Leitores seguintes entram sem bloquear uns aos outros.
+[17:16:50.101] 3) O ultimo leitor liberta o recurso para permitir ao escritor continuar.
+[17:16:50.101] Inicializacao: escritor e leitores vao arrancar em paralelo.
+[17:16:50.102] [Escritor] ciclo=1: aguardando acesso exclusivo ao recurso...
+[17:16:50.102] [Escritor] ciclo=1: escreveu valor=1.
+[17:16:50.102] [Leitor 1] ciclo=1: a solicitar entrada na secao de leitores...
+[17:16:50.102] [Leitor 1] ciclo=1: readersCount incrementado para 1.
+[17:16:50.103] [Leitor 1] ciclo=1: primeiro leitor, a bloquear resourceAccess.
+[17:16:50.103] [Leitor 2] ciclo=1: a solicitar entrada na secao de leitores...
+[17:16:50.363] [Leitor 1] ciclo=1: leu valor=1.
+[17:16:50.363] [Leitor 2] ciclo=1: readersCount incrementado para 2.
+[17:16:50.363] [Escritor] ciclo=1: libertou acesso exclusivo ao recurso.
+[17:16:50.364] [Leitor 2] ciclo=1: leu valor=1.
+[17:16:50.517] [Leitor 1] ciclo=1: readersCount decrementado para 1.
+[17:16:50.517] [Leitor 2] ciclo=1: readersCount decrementado para 0.
+[17:16:50.517] [Leitor 2] ciclo=1: ultimo leitor, a libertar resourceAccess.
+[17:16:50.578] [Escritor] ciclo=2: aguardando acesso exclusivo ao recurso...
+[17:16:50.579] [Escritor] ciclo=2: escreveu valor=2.
+[17:16:50.701] [Leitor 1] ciclo=2: a solicitar entrada na secao de leitores...
+[17:16:50.702] [Leitor 1] ciclo=2: readersCount incrementado para 1.
+[17:16:50.702] [Leitor 2] ciclo=2: a solicitar entrada na secao de leitores...
+[17:16:50.702] [Leitor 1] ciclo=2: primeiro leitor, a bloquear resourceAccess.
+[17:16:50.842] [Escritor] ciclo=2: libertou acesso exclusivo ao recurso.
+[17:16:50.842] [Leitor 1] ciclo=2: leu valor=2.
+[17:16:50.842] [Leitor 2] ciclo=2: readersCount incrementado para 2.
+[17:16:50.842] [Leitor 2] ciclo=2: leu valor=2.
+[17:16:50.997] [Leitor 2] ciclo=2: readersCount decrementado para 1.
+[17:16:50.998] [Leitor 1] ciclo=2: readersCount decrementado para 0.
+[17:16:50.998] [Leitor 1] ciclo=2: ultimo leitor, a libertar resourceAccess.
+[17:16:51.043] [Escritor] ciclo=3: aguardando acesso exclusivo ao recurso...
+[17:16:51.044] [Escritor] ciclo=3: escreveu valor=3.
+[17:16:51.184] [Leitor 1] ciclo=3: a solicitar entrada na secao de leitores...
+[17:16:51.184] [Leitor 1] ciclo=3: readersCount incrementado para 1.
+[17:16:51.185] [Leitor 1] ciclo=3: primeiro leitor, a bloquear resourceAccess.
+[17:16:51.184] [Leitor 2] ciclo=3: a solicitar entrada na secao de leitores...
+[17:16:51.308] [Leitor 1] ciclo=3: leu valor=3.
+[17:16:51.308] [Escritor] ciclo=3: libertou acesso exclusivo ao recurso.
+[17:16:51.308] [Leitor 2] ciclo=3: readersCount incrementado para 2.
+[17:16:51.309] [Leitor 2] ciclo=3: leu valor=3.
+[17:16:51.463] [Leitor 1] ciclo=3: readersCount decrementado para 1.
+[17:16:51.464] [Leitor 2] ciclo=3: readersCount decrementado para 0.
+[17:16:51.464] [Leitor 2] ciclo=3: ultimo leitor, a libertar resourceAccess.
+[17:16:51.510] [Escritor] ciclo=4: aguardando acesso exclusivo ao recurso...
+[17:16:51.510] [Escritor] ciclo=4: escreveu valor=4.
+[17:16:51.650] [Leitor 1] ciclo=4: a solicitar entrada na secao de leitores...
+[17:16:51.651] [Leitor 1] ciclo=4: readersCount incrementado para 1.
+[17:16:51.651] [Leitor 1] ciclo=4: primeiro leitor, a bloquear resourceAccess.
+[17:16:51.650] [Leitor 2] ciclo=4: a solicitar entrada na secao de leitores...
+[17:16:51.776] [Escritor] ciclo=4: libertou acesso exclusivo ao recurso.
+[17:16:51.776] [Leitor 2] ciclo=4: readersCount incrementado para 2.
+[17:16:51.776] [Leitor 2] ciclo=4: leu valor=4.
+[17:16:51.776] [Leitor 1] ciclo=4: leu valor=4.
+[17:16:51.932] [Leitor 1] ciclo=4: readersCount decrementado para 1.
+[17:16:51.932] [Leitor 2] ciclo=4: readersCount decrementado para 0.
+[17:16:51.932] [Leitor 2] ciclo=4: ultimo leitor, a libertar resourceAccess.
+[17:16:51.978] [Escritor] ciclo=5: aguardando acesso exclusivo ao recurso...
+[17:16:51.979] [Escritor] ciclo=5: escreveu valor=5.
+[17:16:52.114] [Leitor 2] ciclo=5: a solicitar entrada na secao de leitores...
+[17:16:52.115] [Leitor 2] ciclo=5: readersCount incrementado para 1.
+[17:16:52.114] [Leitor 1] ciclo=5: a solicitar entrada na secao de leitores...
+[17:16:52.115] [Leitor 2] ciclo=5: primeiro leitor, a bloquear resourceAccess.
+[17:16:52.237] [Escritor] ciclo=5: libertou acesso exclusivo ao recurso.
+[17:16:52.237] [Leitor 2] ciclo=5: leu valor=5.
+[17:16:52.237] [Leitor 1] ciclo=5: readersCount incrementado para 2.
+[17:16:52.238] [Leitor 1] ciclo=5: leu valor=5.
+[17:16:52.391] [Leitor 1] ciclo=5: readersCount decrementado para 1.
+[17:16:52.392] [Leitor 2] ciclo=5: readersCount decrementado para 0.
+[17:16:52.392] [Leitor 2] ciclo=5: ultimo leitor, a libertar resourceAccess.
+[17:16:52.438] [Escritor] terminou todas as escritas.
+[17:16:52.578] [Leitor 1] terminou todas as leituras.
+[17:16:52.578] [Leitor 2] terminou todas as leituras.
+[17:16:52.579] Estado final partilhado: sharedValue=5, readersCount=0.
+[17:16:52.579] === Fim do cenario Readers-Writers ===

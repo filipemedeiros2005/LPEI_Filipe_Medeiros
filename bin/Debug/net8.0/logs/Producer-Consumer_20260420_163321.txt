@@ -1,0 +1,157 @@
+﻿16:33:21.469 | T1 | SYSTEM | Inicio do log para o cenario 'Producer-Consumer'.
+16:33:21.472 | T1 | ALGO   | Cenario iniciado: Producer-Consumer (1 produtor, 1 consumidor, buffer limitado)
+16:33:21.473 | T1 | ALGO   | Recursos inicializados: bufferLimit=5, totalItems=10, emptySlots=5, filledSlots=0
+16:33:21.473 | T1 | THREAD | [Main] A criar thread do produtor.
+16:33:21.473 | T1 | THREAD | [Main] A criar thread do consumidor.
+16:33:21.473 | T1 | THREAD | [Main] A iniciar thread do produtor.
+16:33:21.474 | T1 | THREAD | [Main] A iniciar thread do consumidor.
+16:33:21.474 | T4 | THREAD | [Produtor] Thread iniciada e pronta para produzir itens.
+16:33:21.475 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 1.
+16:33:21.476 | T1 | THREAD | [Main] A aguardar conclusao da thread do produtor (Join).
+16:33:21.476 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 1.
+16:33:21.476 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 1.
+16:33:21.476 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 1.
+16:33:21.476 | T5 | THREAD | [Consumidor] Thread iniciada e pronta para consumir itens.
+16:33:21.476 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 1).
+16:33:21.476 | T4 | BUFFER | [Buffer] Produtor inseriu item 1. Estado atual=1/5
+16:33:21.476 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 1.
+16:33:21.476 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 1).
+16:33:21.477 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 1).
+16:33:21.477 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 1).
+16:33:21.477 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 1).
+16:33:21.477 | T5 | BUFFER | [Buffer] Consumidor removeu item 1. Estado atual=0/5
+16:33:21.477 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 1.
+16:33:21.477 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 1.
+16:33:21.685 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 2.
+16:33:21.685 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 2.
+16:33:21.685 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 2.
+16:33:21.685 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 2.
+16:33:21.686 | T4 | BUFFER | [Buffer] Produtor inseriu item 2. Estado atual=1/5
+16:33:21.686 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 2.
+16:33:21.686 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 2).
+16:33:21.791 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 2).
+16:33:21.791 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 2).
+16:33:21.791 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 2).
+16:33:21.791 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 2).
+16:33:21.792 | T5 | BUFFER | [Buffer] Consumidor removeu item 2. Estado atual=0/5
+16:33:21.792 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 2.
+16:33:21.792 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 2.
+16:33:21.900 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 3.
+16:33:21.900 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 3.
+16:33:21.900 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 3.
+16:33:21.900 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 3.
+16:33:21.901 | T4 | BUFFER | [Buffer] Produtor inseriu item 3. Estado atual=1/5
+16:33:21.901 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 3.
+16:33:21.901 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 3).
+16:33:22.101 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 3).
+16:33:22.101 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 3).
+16:33:22.101 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 3).
+16:33:22.101 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 3).
+16:33:22.102 | T5 | BUFFER | [Buffer] Consumidor removeu item 3. Estado atual=0/5
+16:33:22.102 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 3.
+16:33:22.102 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 3.
+16:33:22.115 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 4.
+16:33:22.116 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 4.
+16:33:22.116 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 4.
+16:33:22.116 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 4.
+16:33:22.117 | T4 | BUFFER | [Buffer] Produtor inseriu item 4. Estado atual=1/5
+16:33:22.117 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 4.
+16:33:22.117 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 4).
+16:33:22.319 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 5.
+16:33:22.319 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 5.
+16:33:22.319 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 5.
+16:33:22.319 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 5.
+16:33:22.319 | T4 | BUFFER | [Buffer] Produtor inseriu item 5. Estado atual=2/5
+16:33:22.319 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 5.
+16:33:22.319 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 5).
+16:33:22.411 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 4).
+16:33:22.412 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 4).
+16:33:22.412 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 4).
+16:33:22.412 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 4).
+16:33:22.412 | T5 | BUFFER | [Buffer] Consumidor removeu item 4. Estado atual=1/5
+16:33:22.412 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 4.
+16:33:22.412 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 4.
+16:33:22.537 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 6.
+16:33:22.537 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 6.
+16:33:22.537 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 6.
+16:33:22.537 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 6.
+16:33:22.537 | T4 | BUFFER | [Buffer] Produtor inseriu item 6. Estado atual=2/5
+16:33:22.537 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 6.
+16:33:22.537 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 6).
+16:33:22.720 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 5).
+16:33:22.720 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 5).
+16:33:22.720 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 5).
+16:33:22.720 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 5).
+16:33:22.721 | T5 | BUFFER | [Buffer] Consumidor removeu item 5. Estado atual=1/5
+16:33:22.721 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 5.
+16:33:22.721 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 5.
+16:33:22.751 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 7.
+16:33:22.751 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 7.
+16:33:22.751 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 7.
+16:33:22.751 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 7.
+16:33:22.752 | T4 | BUFFER | [Buffer] Produtor inseriu item 7. Estado atual=2/5
+16:33:22.752 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 7.
+16:33:22.752 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 7).
+16:33:22.954 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 8.
+16:33:22.955 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 8.
+16:33:22.955 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 8.
+16:33:22.955 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 8.
+16:33:22.958 | T4 | BUFFER | [Buffer] Produtor inseriu item 8. Estado atual=3/5
+16:33:22.958 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 8.
+16:33:22.958 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 8).
+16:33:23.030 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 6).
+16:33:23.030 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 6).
+16:33:23.030 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 6).
+16:33:23.030 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 6).
+16:33:23.031 | T5 | BUFFER | [Buffer] Consumidor removeu item 6. Estado atual=2/5
+16:33:23.031 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 6.
+16:33:23.031 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 6.
+16:33:23.169 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 9.
+16:33:23.170 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 9.
+16:33:23.170 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 9.
+16:33:23.170 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 9.
+16:33:23.170 | T4 | BUFFER | [Buffer] Produtor inseriu item 9. Estado atual=3/5
+16:33:23.170 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 9.
+16:33:23.170 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 9).
+16:33:23.339 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 7).
+16:33:23.340 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 7).
+16:33:23.340 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 7).
+16:33:23.340 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 7).
+16:33:23.340 | T5 | BUFFER | [Buffer] Consumidor removeu item 7. Estado atual=2/5
+16:33:23.340 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 7.
+16:33:23.340 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 7.
+16:33:23.371 | T4 | SYNC   | [emptySlots] Produtor vai aguardar slot livre para item 10.
+16:33:23.371 | T4 | SYNC   | [emptySlots] Produtor obteve slot livre para item 10.
+16:33:23.371 | T4 | SYNC   | [mutex] Produtor vai tentar entrar na secao critica para inserir item 10.
+16:33:23.371 | T4 | SYNC   | [mutex] Produtor entrou na secao critica para inserir item 10.
+16:33:23.372 | T4 | BUFFER | [Buffer] Produtor inseriu item 10. Estado atual=3/5
+16:33:23.372 | T4 | SYNC   | [mutex] Produtor saiu da secao critica apos inserir item 10.
+16:33:23.372 | T4 | SYNC   | [filledSlots] Produtor sinalizou que existe novo item disponivel (item 10).
+16:33:23.573 | T4 | THREAD | [Produtor] Thread terminou apos produzir todos os itens.
+16:33:23.573 | T1 | THREAD | [Main] Thread do produtor terminou.
+16:33:23.573 | T1 | THREAD | [Main] A aguardar conclusao da thread do consumidor (Join).
+16:33:23.650 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 8).
+16:33:23.650 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 8).
+16:33:23.650 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 8).
+16:33:23.650 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 8).
+16:33:23.651 | T5 | BUFFER | [Buffer] Consumidor removeu item 8. Estado atual=2/5
+16:33:23.651 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 8.
+16:33:23.651 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 8.
+16:33:23.961 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 9).
+16:33:23.961 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 9).
+16:33:23.961 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 9).
+16:33:23.961 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 9).
+16:33:23.962 | T5 | BUFFER | [Buffer] Consumidor removeu item 9. Estado atual=1/5
+16:33:23.962 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 9.
+16:33:23.962 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 9.
+16:33:24.274 | T5 | SYNC   | [filledSlots] Consumidor vai aguardar item disponivel (iteracao 10).
+16:33:24.275 | T5 | SYNC   | [filledSlots] Consumidor recebeu sinal de item disponivel (iteracao 10).
+16:33:24.275 | T5 | SYNC   | [mutex] Consumidor vai tentar entrar na secao critica para remover item (iteracao 10).
+16:33:24.275 | T5 | SYNC   | [mutex] Consumidor entrou na secao critica para remover item (iteracao 10).
+16:33:24.276 | T5 | BUFFER | [Buffer] Consumidor removeu item 10. Estado atual=0/5
+16:33:24.276 | T5 | SYNC   | [mutex] Consumidor saiu da secao critica apos remover item 10.
+16:33:24.276 | T5 | SYNC   | [emptySlots] Consumidor sinalizou slot livre apos consumir item 10.
+16:33:24.587 | T5 | THREAD | [Consumidor] Thread terminou apos consumir todos os itens.
+16:33:24.587 | T1 | THREAD | [Main] Thread do consumidor terminou.
+16:33:24.587 | T1 | ALGO   | Fim do cenario Producer-Consumer.
+16:33:27.019 | T1 | SYSTEM | Fim do log. Duracao total: 5550 ms
