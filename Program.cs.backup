@@ -1,0 +1,782 @@
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Text;
+
+namespace Projeto;
+
+// Configuracoes parametrizaveis para cada cenario
+record ProducerConsumerConfig(int Producers, int Consumers, int BufferSize, int ItemsPerProducer);
+record ReadersWritersConfig(int Readers, int Writers, int IterationsPerThread);
+record DiningPhilosophersConfig(int Philosophers, int RoundsPerPhilosopher);
+record BarrierSynchronizationConfig(int Workers, int Phases);
+
+class Program
+{
+    static void Main()
+    {
+        // ===================== FUNCOES DE CONFIGURACAO =====================
+
+        static ProducerConsumerConfig GetProducerConsumerConfig()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Configuracao: Producer-Consumer ===");
+            Console.WriteLine();
+            
+            int producers = GetPositiveInt("Numero de produtores (padrao: 2): ", 2);
+            int consumers = GetPositiveInt("Numero de consumidores (padrao: 2): ", 2);
+            int bufferSize = GetPositiveInt("Tamanho do buffer (padrao: 5): ", 5);
+            int itemsPerProducer = GetPositiveInt("Items por produtor (padrao: 10): ", 10);
+
+            return new ProducerConsumerConfig(producers, consumers, bufferSize, itemsPerProducer);
+        }
+
+        static ReadersWritersConfig GetReadersWritersConfig()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Configuracao: Readers-Writers ===");
+            Console.WriteLine();
+            
+            int readers = GetPositiveInt("Numero de leitores (padrao: 3): ", 3);
+            int writers = GetPositiveInt("Numero de escritores (padrao: 2): ", 2);
+            int iterations = GetPositiveInt("Iteracoes por thread (padrao: 5): ", 5);
+
+            return new ReadersWritersConfig(readers, writers, iterations);
+        }
+
+        static DiningPhilosophersConfig GetDiningPhilosophersConfig()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Configuracao: Dining Philosophers ===");
+            Console.WriteLine();
+            
+            int philosophers = GetPositiveInt("Numero de filosofos (padrao: 5, minimo: 3): ", 5);
+            if (philosophers < 3) philosophers = 3;
+            
+            int rounds = GetPositiveInt("Rondas por filosofo (padrao: 4): ", 4);
+
+            return new DiningPhilosophersConfig(philosophers, rounds);
+        }
+
+        static BarrierSynchronizationConfig GetBarrierSynchronizationConfig()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Configuracao: Barrier Synchronization ===");
+            Console.WriteLine();
+            
+            int workers = GetPositiveInt("Numero de workers (padrao: 4): ", 4);
+            int phases = GetPositiveInt("Numero de fases (padrao: 3): ", 3);
+
+            return new BarrierSynchronizationConfig(workers, phases);
+        }
+
+        static int GetPositiveInt(string prompt, int defaultValue)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string? input = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrEmpty(input))
+                {
+                    return defaultValue;
+                }
+
+                if (int.TryParse(input, out int value) && value > 0)
+                {
+                    return value;
+                }
+
+                Console.WriteLine("Entrada invalida. Por favor, introduza um numero positivo.");
+            }
+        }
+
+        // ===================== MENU PRINCIPAL =====================
+
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("Menu de cenarios concorrentes");
+            Console.WriteLine("1 - Producer-Consumer");
+            Console.WriteLine("2 - Readers-Writers");
+            Console.WriteLine("3 - Dining Philosphers");
+            Console.WriteLine("4 - Barrier Synchronization / Thread Coordination");
+            Console.WriteLine("0 - sair");
+            Console.Write("Escolha uma opcao: ");
+
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    var pcConfig = GetProducerConsumerConfig();
+                    RunProducerConsumer(pcConfig);
+                    break;
+                case "2":
+                    var rwConfig = GetReadersWritersConfig();
+                    RunReadersWriters(rwConfig);
+                    break;
+                case "3":
+                    var dpConfig = GetDiningPhilosophersConfig();
+                    RunDiningPhilosophers(dpConfig);
+                    break;
+                case "4":
+                    var bsConfig = GetBarrierSynchronizationConfig();
+                    RunBarrierSynchronization(bsConfig);
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Opcao invalida.");
+                    Pause();
+                    break;
+            }
+        }
+    }
+
+    // ===================== FUNCOES DE CENARIOS =====================
+
+    static void RunProducerConsumer(ProducerConsumerConfig config)
+    {
+        Console.Clear();
+        Console.WriteLine($"Producer-Consumer ({config.Producers} produtores, {config.Consumers} consumidores, buffer={config.BufferSize})");
+        Console.WriteLine();
+
+        var buffer = new Queue<int>();
+        var mutex = new SemaphoreSlim(1, 1);
+        var emptySlots = new SemaphoreSlim(config.BufferSize, config.BufferSize);
+        var filledSlots = new SemaphoreSlim(0, config.BufferSize);
+
+        using var logger = CreateScenarioLogger("Producer-Consumer");
+        
+        // Exibir e registrar os parametros como primeira linha
+        string parametersLine = $"PARAMETROS: Produtores={config.Producers}, Consumidores={config.Consumers}, Buffer={config.BufferSize}, Items/Produtor={config.ItemsPerProducer}";
+        Console.WriteLine(parametersLine);
+    logger.Log(parametersLine);
+    logger.Log("");
+    
+    logger.Log("=== Inicio do cenario Producer-Consumer ===");
+    logger.Log("Arquitetura do sistema:");
+    logger.Log("- Componente Produtor: gera itens e tenta inseri-los no buffer limitado.");
+    logger.Log("- Componente Consumidor: remove itens do buffer e processa-os.");
+    logger.Log("- Buffer partilhado: fila FIFO com capacidade fixa.");
+    logger.Log("- Sincronizacao: mutex para exclusao mutua + semaforos de slots vazios/ocupados.");
+    logger.Log("Algoritmo de sincronizacao:");
+    logger.Log("1) Produtor espera em emptySlots antes de escrever no buffer.");
+    logger.Log("2) Consumidor espera em filledSlots antes de ler do buffer.");
+    logger.Log("3) O mutex garante que apenas uma thread altera a fila por vez.");
+    logger.Log($"Estado inicial do buffer: {RenderBufferBoxes(buffer, config.BufferSize)}");
+
+    void LogBufferState(string actor, string action, int item)
+    {
+        logger.Log($"[{actor}] {action} item={item} | ocupacao={buffer.Count}/{config.BufferSize} | buffer={RenderBufferBoxes(buffer, config.BufferSize)}");
+    }
+
+    // Criar produtores
+    Thread[] producers = new Thread[config.Producers];
+    for (int p = 0; p < config.Producers; p++)
+    {
+        int producerId = p + 1;
+        producers[p] = new Thread(() =>
+        {
+            logger.Log($"[Produtor {producerId}] inicializando...");
+            for (int i = 1; i <= config.ItemsPerProducer; i++)
+            {
+                int itemId = (producerId * 1000) + i;
+                logger.Log($"[Produtor {producerId}] tentativa de produzir item={itemId}. Aguardando slot vazio...");
+                emptySlots.Wait();
+                logger.Log($"[Produtor {producerId}] slot vazio reservado para item={itemId}. Aguardando mutex...");
+                mutex.Wait();
+
+                buffer.Enqueue(itemId);
+                LogBufferState($"Produtor {producerId}", "produziu", itemId);
+
+                mutex.Release();
+                logger.Log($"[Produtor {producerId}] mutex libertado apos inserir item={itemId}. Sinalizando filledSlots.");
+                filledSlots.Release();
+                Thread.Sleep(200);
+            }
+
+            logger.Log($"[Produtor {producerId}] terminou a producao de todos os {config.ItemsPerProducer} itens.");
+        });
+    }
+
+    // Criar consumidores
+    Thread[] consumers = new Thread[config.Consumers];
+    int totalItemsToConsume = config.Producers * config.ItemsPerProducer;
+    for (int c = 0; c < config.Consumers; c++)
+    {
+        int consumerId = c + 1;
+        consumers[c] = new Thread(() =>
+        {
+            logger.Log($"[Consumidor {consumerId}] inicializando...");
+            for (int i = 1; i <= (totalItemsToConsume / config.Consumers) + 1; i++)
+            {
+                logger.Log($"[Consumidor {consumerId}] tentativa de consumir (iteracao {i}). Aguardando item disponivel...");
+                
+                if (filledSlots.CurrentCount == 0 && buffer.Count == 0)
+                {
+                    logger.Log($"[Consumidor {consumerId}] buffer vazio, sem mais itens para consumir.");
+                    break;
+                }
+                
+                filledSlots.Wait();
+                logger.Log($"[Consumidor {consumerId}] item disponivel confirmado. Aguardando mutex...");
+                mutex.Wait();
+
+                if (buffer.Count > 0)
+                {
+                    int item = buffer.Dequeue();
+                    LogBufferState($"Consumidor {consumerId}", "consumiu", item);
+                    mutex.Release();
+                    logger.Log($"[Consumidor {consumerId}] mutex libertado apos remover item={item}. Sinalizando emptySlots.");
+                    emptySlots.Release();
+                }
+                else
+                {
+                    mutex.Release();
+                    logger.Log($"[Consumidor {consumerId}] buffer vazio, saindo.");
+                    break;
+                }
+
+                Thread.Sleep(300);
+            }
+
+            logger.Log($"[Consumidor {consumerId}] terminou o consumo.");
+        });
+    }
+
+    logger.Log($"Inicializacao: {config.Producers} produtor(es) e {config.Consumers} consumidor(es) vao arrancar em paralelo.");
+    foreach (var producer in producers)
+    {
+        producer.Start();
+    }
+    foreach (var consumer in consumers)
+    {
+        consumer.Start();
+    }
+
+    logger.Log("Threads iniciadas. A sincronizacao agora depende dos semaforos e mutex.");
+    
+    foreach (var producer in producers)
+    {
+        producer.Join();
+    }
+    foreach (var consumer in consumers)
+    {
+        consumer.Join();
+    }
+
+    logger.Log($"Estado final do buffer: {RenderBufferBoxes(buffer, config.BufferSize)}");
+    logger.Log("=== Fim do cenario Producer-Consumer ===");
+    Console.WriteLine("Fim do cenario Producer-Consumer.");
+    Console.WriteLine($"Log guardado em: {logger.LogPath}");
+    logger.PresentLogsInteractively();
+}
+
+static void RunReadersWriters(ReadersWritersConfig config)
+{
+    Console.Clear();
+    Console.WriteLine($"Readers-Writers ({config.Readers} leitores, {config.Writers} escritores)");
+    Console.WriteLine();
+
+    int sharedValue = 0;
+    int readersCount = 0;
+    var readersCountMutex = new SemaphoreSlim(1, 1);
+    var resourceAccess = new SemaphoreSlim(1, 1);
+
+    using var logger = CreateScenarioLogger("Readers-Writers");
+    
+    // Exibir e registrar os parametros
+    string parametersLine = $"PARAMETROS: Leitores={config.Readers}, Escritores={config.Writers}, Iteracoes={config.IterationsPerThread}";
+    Console.WriteLine(parametersLine);
+    logger.Log(parametersLine);
+    logger.Log("");
+    
+    logger.Log("=== Inicio do cenario Readers-Writers ===");
+    logger.Log("Arquitetura do sistema:");
+    logger.Log("- Um ou mais escritores atualizam o estado partilhado com acesso exclusivo.");
+    logger.Log("- Um ou mais leitores consultam o estado de forma concorrente.");
+    logger.Log("- readersCount rastreia quantos leitores estao ativos no momento.");
+    logger.Log("- readersCountMutex protege a contabilizacao de leitores ativos.");
+    logger.Log("- resourceAccess representa o lock do recurso partilhado.");
+    logger.Log("Algoritmo usado:");
+    logger.Log("1) O primeiro leitor bloqueia o recurso para impedir escrita concorrente.");
+    logger.Log("2) Leitores seguintes entram sem bloquear uns aos outros.");
+    logger.Log("3) O ultimo leitor liberta o recurso para permitir ao escritor continuar.");
+
+    Thread[] writers = new Thread[config.Writers];
+    for (int w = 0; w < config.Writers; w++)
+    {
+        int writerId = w + 1;
+        writers[w] = new Thread(() =>
+        {
+            logger.Log($"[Escritor {writerId}] inicializando...");
+            for (int i = 1; i <= config.IterationsPerThread; i++)
+            {
+                logger.Log($"[Escritor {writerId}] iteracao={i}: aguardando acesso exclusivo ao recurso...");
+                resourceAccess.Wait();
+                sharedValue++;
+                logger.Log($"[Escritor {writerId}] iteracao={i}: ESCREVENDO valor={sharedValue} (incrementado).");
+                logger.Log($"[Escritor {writerId}] iteracao={i}: estado da critica: valor={sharedValue}, leitores ativos={readersCount}");
+                Thread.Sleep(250);
+                resourceAccess.Release();
+                logger.Log($"[Escritor {writerId}] iteracao={i}: libertou acesso exclusivo ao recurso.");
+                Thread.Sleep(200);
+            }
+
+            logger.Log($"[Escritor {writerId}] terminou todas as {config.IterationsPerThread} escritas.");
+        });
+    }
+
+    Thread[] readers = new Thread[config.Readers];
+    for (int r = 0; r < config.Readers; r++)
+    {
+        int readerId = r + 1;
+        readers[r] = new Thread(() =>
+        {
+            logger.Log($"[Leitor {readerId}] inicializando...");
+            for (int i = 1; i <= config.IterationsPerThread; i++)
+            {
+                logger.Log($"[Leitor {readerId}] iteracao={i}: a solicitar entrada na secao de leitores...");
+                readersCountMutex.Wait();
+                readersCount++;
+                logger.Log($"[Leitor {readerId}] iteracao={i}: readersCount incrementado para {readersCount}.");
+                // Primeiro leitor bloqueia o escritor
+                if (readersCount == 1)
+                {
+                    logger.Log($"[Leitor {readerId}] iteracao={i}: PRIMEIRO LEITOR - bloqueando resourceAccess para impedir escrita.");
+                    resourceAccess.Wait();
+                    logger.Log($"[Leitor {readerId}] iteracao={i}: resourceAccess bloqueado com sucesso.");
+                }
+                readersCountMutex.Release();
+                logger.Log($"[Leitor {readerId}] iteracao={i}: readersCountMutex libertado.");
+
+                logger.Log($"[Leitor {readerId}] iteracao={i}: LENDO valor={sharedValue}.");
+                logger.Log($"[Leitor {readerId}] iteracao={i}: estado da critica: valor={sharedValue}, leitores ativos={readersCount}");
+                Thread.Sleep(150);
+
+                readersCountMutex.Wait();
+                readersCount--;
+                logger.Log($"[Leitor {readerId}] iteracao={i}: readersCount decrementado para {readersCount}.");
+                // Ultimo leitor liberta para escritor
+                if (readersCount == 0)
+                {
+                    logger.Log($"[Leitor {readerId}] iteracao={i}: ULTIMO LEITOR - libertando resourceAccess para permitir escrita.");
+                    resourceAccess.Release();
+                    logger.Log($"[Leitor {readerId}] iteracao={i}: resourceAccess libertado com sucesso.");
+                }
+                readersCountMutex.Release();
+                logger.Log($"[Leitor {readerId}] iteracao={i}: readersCountMutex libertado.");
+
+                Thread.Sleep(180);
+            }
+
+            logger.Log($"[Leitor {readerId}] terminou todas as {config.IterationsPerThread} leituras.");
+        });
+    }
+
+    logger.Log($"Inicializacao: {config.Writers} escritor(es) e {config.Readers} leitor(es) vao arrancar em paralelo.");
+    foreach (var writer in writers)
+    {
+        writer.Start();
+    }
+    foreach (var reader in readers)
+    {
+        reader.Start();
+    }
+
+    foreach (var writer in writers)
+    {
+        writer.Join();
+    }
+    foreach (var reader in readers)
+    {
+        reader.Join();
+    }
+
+    logger.Log($"Estado final partilhado: sharedValue={sharedValue}, readersCount={readersCount}.");
+    logger.Log("=== Fim do cenario Readers-Writers ===");
+    Console.WriteLine("Fim do cenario Readers-Writers.");
+    Console.WriteLine($"Log guardado em: {logger.LogPath}");
+    logger.PresentLogsInteractively();
+}
+
+static void RunDiningPhilosophers(DiningPhilosophersConfig config)
+{
+    Console.Clear();
+    Console.WriteLine($"Dining Philosophers ({config.Philosophers} filosofos, {config.RoundsPerPhilosopher} rondas)");
+    Console.WriteLine();
+
+    object[] forks = Enumerable.Range(0, config.Philosophers).Select(_ => new object()).ToArray();
+    Thread[] philosophers = new Thread[config.Philosophers];
+
+    using var logger = CreateScenarioLogger("Dining-Philosophers");
+    
+    // Exibir e registrar os parametros
+    string parametersLine = $"PARAMETROS: Filosofos={config.Philosophers}, Rondas={config.RoundsPerPhilosopher}";
+    Console.WriteLine(parametersLine);
+    logger.Log(parametersLine);
+    logger.Log("");
+    
+    logger.Log("=== Inicio do cenario Dining Philosophers ===");
+    logger.Log("Arquitetura do sistema:");
+    logger.Log($"- {config.Philosophers} filosofos (threads) alternam entre pensar e comer.");
+    logger.Log($"- {config.Philosophers} garfos (locks) representam recursos exclusivos partilhados.");
+    logger.Log("- Cada filosofo precisa de 2 garfos adjacentes para comer.");
+    logger.Log("Estrategia de prevencao de deadlock:");
+    logger.Log($"- Filosofos 0..{config.Philosophers - 2} apanham primeiro o garfo esquerdo e depois o direito.");
+    logger.Log($"- O ultimo filosofo (id={config.Philosophers - 1}) inverte a ordem para quebrar espera circular.");
+
+    for (int i = 0; i < config.Philosophers; i++)
+    {
+        int id = i;
+        philosophers[i] = new Thread(() =>
+        {
+            logger.Log($"[Filosofo {id}] inicializando...");
+            int leftFork = id;
+            int rightFork = (id + 1) % config.Philosophers;
+
+            for (int round = 1; round <= config.RoundsPerPhilosopher; round++)
+            {
+                logger.Log($"[Filosofo {id}] ronda={round}: estado=PENSAR. Refletindo sobre a existencia...");
+                Thread.Sleep(200);
+                logger.Log($"[Filosofo {id}] ronda={round}: acordou e tem fome!");
+
+                // O ultimo filosofo pega os garfos em ordem inversa para evitar deadlock.
+                if (id == config.Philosophers - 1)
+                {
+                    logger.Log($"[Filosofo {id}] ronda={round}: ULTIMO FILOSOFO - tenta bloquear garfo direito={rightFork} primeiro (ordem inversa).");
+                    logger.Log($"[Filosofo {id}] ronda={round}: aguardando lock do garfo direito={rightFork}...");
+                    lock (forks[rightFork])
+                    {
+                        logger.Log($"[Filosofo {id}] ronda={round}: bloqueou garfo direito={rightFork}; agora tenta garfo esquerdo={leftFork}.");
+                        logger.Log($"[Filosofo {id}] ronda={round}: aguardando lock do garfo esquerdo={leftFork}...");
+                        lock (forks[leftFork])
+                        {
+                            logger.Log($"[Filosofo {id}] ronda={round}: ESTADO=COMER (tem ambos os garfos {rightFork} e {leftFork}).");
+                            logger.Log($"[Filosofo {id}] ronda={round}: comendo refeicao com os dois garfos...");
+                            Thread.Sleep(200);
+                            logger.Log($"[Filosofo {id}] ronda={round}: terminou de comer.");
+                        }
+                        logger.Log($"[Filosofo {id}] ronda={round}: libertou garfo esquerdo={leftFork}.");
+                    }
+                    logger.Log($"[Filosofo {id}] ronda={round}: libertou garfo direito={rightFork}. Voltando a pensar...");
+                }
+                else
+                {
+                    logger.Log($"[Filosofo {id}] ronda={round}: tenta bloquear garfo esquerdo={leftFork} primeiro.");
+                    logger.Log($"[Filosofo {id}] ronda={round}: aguardando lock do garfo esquerdo={leftFork}...");
+                    lock (forks[leftFork])
+                    {
+                        logger.Log($"[Filosofo {id}] ronda={round}: bloqueou garfo esquerdo={leftFork}; agora tenta garfo direito={rightFork}.");
+                        logger.Log($"[Filosofo {id}] ronda={round}: aguardando lock do garfo direito={rightFork}...");
+                        lock (forks[rightFork])
+                        {
+                            logger.Log($"[Filosofo {id}] ronda={round}: ESTADO=COMER (tem ambos os garfos {leftFork} e {rightFork}).");
+                            logger.Log($"[Filosofo {id}] ronda={round}: comendo refeicao com os dois garfos...");
+                            Thread.Sleep(200);
+                            logger.Log($"[Filosofo {id}] ronda={round}: terminou de comer.");
+                        }
+                        logger.Log($"[Filosofo {id}] ronda={round}: libertou garfo direito={rightFork}.");
+                    }
+                    logger.Log($"[Filosofo {id}] ronda={round}: libertou garfo esquerdo={leftFork}. Voltando a pensar...");
+                }
+            }
+
+            logger.Log($"[Filosofo {id}] terminou todas as {config.RoundsPerPhilosopher} rondas.");
+        });
+    }
+
+    logger.Log($"Inicializacao: {config.Philosophers} filosofos vao arrancar em paralelo.");
+    foreach (Thread philosopher in philosophers)
+    {
+        philosopher.Start();
+    }
+
+    foreach (Thread philosopher in philosophers)
+    {
+        philosopher.Join();
+    }
+
+    logger.Log("=== Fim do cenario Dining Philosophers ===");
+    Console.WriteLine("Fim do cenario Dining Philosophers.");
+    Console.WriteLine($"Log guardado em: {logger.LogPath}");
+    logger.PresentLogsInteractively();
+}
+
+static void RunBarrierSynchronization(BarrierSynchronizationConfig config)
+{
+    Console.Clear();
+    Console.WriteLine($"Barrier Synchronization ({config.Workers} workers, {config.Phases} fases)");
+    Console.WriteLine();
+
+    using var logger = CreateScenarioLogger("Barrier-Synchronization");
+    
+    // Exibir e registrar os parametros
+    string parametersLine = $"PARAMETROS: Workers={config.Workers}, Fases={config.Phases}";
+    Console.WriteLine(parametersLine);
+    logger.Log(parametersLine);
+    logger.Log("");
+    
+    logger.Log("=== Inicio do cenario Barrier Synchronization ===");
+    logger.Log("Arquitetura do sistema:");
+    logger.Log($"- {config.Workers} workers executam o trabalho em {config.Phases} fases.");
+    logger.Log("- Uma Barrier coordena o ponto de encontro ao fim de cada fase.");
+    logger.Log("- Nenhuma thread avanca para a proxima fase sem sincronizacao global.");
+    logger.Log("Algoritmo de coordenacao por fases:");
+    logger.Log("1) Cada worker executa cada fase e chama SignalAndWait().");
+    logger.Log("2) A ultima thread a chegar desbloqueia todas para a fase seguinte.");
+    logger.Log($"3) O processo repete-se para as {config.Phases} fases.");
+
+    // A barrier permite que todas as threads avancem em "fases" sincronizadas.
+    using Barrier barrier = new(config.Workers, phase =>
+    {
+        logger.Log($"===== BARREIRA ATIVADA: Todas as {config.Workers} threads terminaram a fase {phase.CurrentPhaseNumber}. Passando para fase seguinte =====");
+    });
+
+    Thread[] threads = new Thread[config.Workers];
+
+    for (int i = 0; i < config.Workers; i++)
+    {
+        int id = i + 1;
+        threads[i] = new Thread(() =>
+        {
+            logger.Log($"[Worker {id}] inicializando...");
+            
+            for (int phase = 0; phase < config.Phases; phase++)
+            {
+                logger.Log($"[Worker {id}] fase {phase}: inicio de processamento...");
+                int workDuration = Random.Shared.Next(200, 600);
+                logger.Log($"[Worker {id}] fase {phase}: vai processar durante ~{workDuration}ms antes de sincronizar.");
+                Thread.Sleep(workDuration);
+                logger.Log($"[Worker {id}] fase {phase}: concluida, aguardando outros workers na barreira...");
+                logger.Log($"[Worker {id}] fase {phase}: chamando SignalAndWait() para sincronizar na barreira.");
+                
+                // Todas bloqueiam aqui ate a ultima thread chegar ao ponto de sincronizacao.
+                barrier.SignalAndWait();
+                
+                logger.Log($"[Worker {id}] fase {phase}: DESBLOQUEADO! Pode avançar para a proxima fase.");
+            }
+
+            logger.Log($"[Worker {id}] terminou todas as {config.Phases} fases e saiu.");
+        });
+    }
+
+    logger.Log($"Inicializacao: {config.Workers} workers vao arrancar em paralelo e sincronizar por {config.Phases} fases.");
+    foreach (Thread thread in threads)
+    {
+        thread.Start();
+    }
+
+    foreach (Thread thread in threads)
+    {
+        thread.Join();
+    }
+
+    logger.Log("=== Fim do cenario Barrier Synchronization ===");
+    Console.WriteLine("Fim do cenario Barrier Synchronization.");
+    Console.WriteLine($"Log guardado em: {logger.LogPath}");
+    logger.PresentLogsInteractively();
+}
+
+static string RenderBufferBoxes(Queue<int> buffer, int limit)
+{
+    int[] snapshot = buffer.ToArray();
+    var sb = new StringBuilder();
+
+    for (int i = 0; i < limit; i++)
+    {
+        if (i < snapshot.Length)
+        {
+            sb.Append($"[{snapshot[i],2}]");
+        }
+        else
+        {
+            sb.Append("[  ]");
+        }
+
+        if (i < limit - 1)
+        {
+            sb.Append(' ');
+        }
+    }
+
+    return sb.ToString();
+}
+
+static ScenarioLogger CreateScenarioLogger(string scenarioName)
+{
+    string logsDirectory = ResolveLogsDirectory();
+    Directory.CreateDirectory(logsDirectory);
+
+    string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+    string fileName = $"{scenarioName}_{timestamp}.txt";
+    string path = Path.Combine(logsDirectory, fileName);
+
+    return new ScenarioLogger(path);
+}
+
+static string ResolveLogsDirectory()
+{
+    string[] startPoints = [
+        Directory.GetCurrentDirectory(),
+        AppContext.BaseDirectory
+    ];
+
+    foreach (string startPoint in startPoints)
+    {
+        DirectoryInfo? current = new(Path.GetFullPath(startPoint));
+
+        while (current is not null)
+        {
+            bool hasSolution = current.GetFiles("*.sln").Length > 0;
+            bool hasProject = current.GetFiles("*.csproj").Length > 0;
+
+            if (hasSolution || hasProject)
+            {
+                return Path.Combine(current.FullName, "logs");
+            }
+
+            current = current.Parent;
+        }
+    }
+
+    // Fallback se nao for possivel detetar a raiz do projeto.
+    return Path.Combine(Directory.GetCurrentDirectory(), "logs");
+}
+
+static void Pause()
+{
+    Console.WriteLine();
+    Console.WriteLine("Prima ENTER para voltar ao menu...");
+    Console.ReadLine();
+}
+
+sealed class ScenarioLogger : IDisposable
+{
+    private sealed record LogEntry(string Message, string Line);
+
+    private readonly object _sync = new();
+    private readonly StreamWriter _writer;
+    private readonly List<LogEntry> _entries = [];
+
+    public string LogPath { get; }
+
+    public ScenarioLogger(string logPath)
+    {
+        LogPath = logPath;
+        _writer = new StreamWriter(LogPath, append: false, encoding: Encoding.UTF8)
+        {
+            AutoFlush = true
+        };
+    }
+
+    public void Log(string message)
+    {
+        string line = $"[{DateTime.Now:HH:mm:ss.fff}] {message}";
+
+        lock (_sync)
+        {
+            _entries.Add(new LogEntry(message, line));
+            _writer.WriteLine(line);
+        }
+    }
+
+    public void PresentLogsInteractively()
+    {
+        List<LogEntry> snapshot;
+
+        lock (_sync)
+        {
+            snapshot = [.. _entries];
+        }
+
+        List<LogEntry> algorithmLogs = [.. snapshot.Where(static entry => IsAlgorithmInformative(entry.Message))];
+
+        if (algorithmLogs.Count == 0)
+        {
+            Console.WriteLine("Nao existem logs informativos do algoritmo para apresentar.");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Apresentacao guiada de logs do algoritmo:");
+
+        for (int i = 0; i < algorithmLogs.Count; i++)
+        {
+            Console.WriteLine(algorithmLogs[i].Line);
+
+            if (i == algorithmLogs.Count - 1)
+            {
+                Console.WriteLine("Fim da apresentacao de logs.");
+                break;
+            }
+
+            while (true)
+            {
+                Console.WriteLine("1. continuar");
+                Console.WriteLine("0. sair");
+                Console.Write("Escolha uma opcao: ");
+
+                string? choice = Console.ReadLine()?.Trim();
+                if (choice == "1")
+                {
+                    break;
+                }
+
+                if (choice == "0")
+                {
+                    Console.WriteLine("Apresentacao de logs terminada pelo utilizador.");
+                    return;
+                }
+
+                Console.WriteLine("Opcao invalida.");
+            }
+        }
+    }
+
+    private static bool IsAlgorithmInformative(string message)
+    {
+        if (message.StartsWith("===", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.Equals("Arquitetura do sistema:", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.StartsWith("- ", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.StartsWith("Algoritmo", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.StartsWith("Estrategia", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.StartsWith("Inicializacao:", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (message.StartsWith("PARAMETROS:", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void Dispose()
+    {
+        _writer.Dispose();
+    }
+}
