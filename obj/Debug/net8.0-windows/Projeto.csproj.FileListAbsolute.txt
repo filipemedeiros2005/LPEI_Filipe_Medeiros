@@ -1,0 +1,15 @@
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\bin\Debug\net8.0-windows\Projeto.exe
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\bin\Debug\net8.0-windows\Projeto.deps.json
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\bin\Debug\net8.0-windows\Projeto.runtimeconfig.json
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\bin\Debug\net8.0-windows\Projeto.dll
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\bin\Debug\net8.0-windows\Projeto.pdb
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.AssemblyInfoInputs.cache
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.AssemblyInfo.cs
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.csproj.CoreCompileInputs.cache
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.sourcelink.json
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.dll
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\refint\Projeto.dll
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.pdb
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\Projeto.genruntimeconfig.cache
+c:\Users\filip\Desktop\Projeto\Repositório\LPEI_Filipe_Medeiros\obj\Debug\net8.0-windows\ref\Projeto.dll
