@@ -1,0 +1,68 @@
+[Readers-Writers] Início do acompanhamento em tempo real.
+[Readers-Writers] Parâmetros: leitores=3, escritores=2, iterações por thread=5.
+[Readers-Writers] O valor partilhado começa no estado inicial 0.
+[Readers-Writers] O contador de leitores ativos começa em 0.
+[Readers-Writers] O primeiro leitor bloqueia o acesso exclusivo ao recurso.
+[Readers-Writers] Leitor 1 iniciou a sua sequência.
+[Readers-Writers] Leitor 1 entra na iteração 1 e solicita leitura partilhada.
+[Readers-Writers] Leitor 1 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 1 entra na iteração 2 e solicita leitura partilhada.
+[Readers-Writers] Leitor 1 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 1 entra na iteração 3 e solicita leitura partilhada.
+[Readers-Writers] Leitor 1 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 1 entra na iteração 4 e solicita leitura partilhada.
+[Readers-Writers] Leitor 1 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 1 entra na iteração 5 e solicita leitura partilhada.
+[Readers-Writers] Leitor 1 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 1 concluiu as 5 leituras.
+[Readers-Writers] Leitor 2 iniciou a sua sequência.
+[Readers-Writers] Leitor 2 entra na iteração 1 e solicita leitura partilhada.
+[Readers-Writers] Leitor 2 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 2 entra na iteração 2 e solicita leitura partilhada.
+[Readers-Writers] Leitor 2 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 2 entra na iteração 3 e solicita leitura partilhada.
+[Readers-Writers] Leitor 2 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 2 entra na iteração 4 e solicita leitura partilhada.
+[Readers-Writers] Leitor 2 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 2 entra na iteração 5 e solicita leitura partilhada.
+[Readers-Writers] Leitor 2 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 2 concluiu as 5 leituras.
+[Readers-Writers] Leitor 3 iniciou a sua sequência.
+[Readers-Writers] Leitor 3 entra na iteração 1 e solicita leitura partilhada.
+[Readers-Writers] Leitor 3 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 3 entra na iteração 2 e solicita leitura partilhada.
+[Readers-Writers] Leitor 3 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 3 entra na iteração 3 e solicita leitura partilhada.
+[Readers-Writers] Leitor 3 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 3 entra na iteração 4 e solicita leitura partilhada.
+[Readers-Writers] Leitor 3 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 3 entra na iteração 5 e solicita leitura partilhada.
+[Readers-Writers] Leitor 3 lê o valor disponível sem bloquear os restantes leitores.
+[Readers-Writers] Leitor 3 concluiu as 5 leituras.
+[Readers-Writers] Escritor 1 iniciou a sua sequência.
+[Readers-Writers] Escritor 1 entra na iteração 1 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 1 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 1 entra na iteração 2 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 1 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 1 entra na iteração 3 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 1 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 1 entra na iteração 4 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 1 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 1 entra na iteração 5 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 1 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 1 concluiu as 5 escritas.
+[Readers-Writers] Escritor 2 iniciou a sua sequência.
+[Readers-Writers] Escritor 2 entra na iteração 1 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 2 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 2 entra na iteração 2 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 2 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 2 entra na iteração 3 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 2 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 2 entra na iteração 4 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 2 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 2 entra na iteração 5 e aguarda acesso exclusivo.
+[Readers-Writers] Escritor 2 atualiza o valor partilhado de forma exclusiva.
+[Readers-Writers] Escritor 2 concluiu as 5 escritas.
+[Readers-Writers] A alternância entre leitores e escritores manteve a exclusão mútua correta.
+[Readers-Writers] Os momentos com vários leitores em simultâneo foram os mais concorrentes.
+[Readers-Writers] Cenário concluído.

@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import tkinter as tk
 from dataclasses import dataclass
+from pathlib import Path
 from tkinter import ttk
 from typing import Callable
 
 try:
-    from .backend_bridge import BackendBridge, BackendBridgeError
+    from .backend_bridge import BackendBridge, BackendBridgeError, FrontendMetadata
 except ImportError:
-    from backend_bridge import BackendBridge, BackendBridgeError
+    from backend_bridge import BackendBridge, BackendBridgeError, FrontendMetadata
 
 
 @dataclass(frozen=True)
@@ -217,9 +218,11 @@ class SimulatorStartView(tk.Tk):
         self._show_view(
             ScenarioConfigView(
                 self._view_container,
+                scenario_key,
                 definition,
                 self._show_scenarios_view,
                 lambda: self._show_scenario_tips_view(scenario_key),
+                lambda values: self._show_scenario_run_view(scenario_key, values),
             )
         )
 
@@ -233,6 +236,45 @@ class SimulatorStartView(tk.Tk):
                 lambda: self._show_scenario_config_view(scenario_key),
             )
         )
+
+    def _show_scenario_run_view(self, scenario_key: str, values: dict[str, int]) -> None:
+        definition = SCENARIO_DEFINITIONS[scenario_key]
+        self.title(f"Acompanhamento - {definition.title}")
+        ordered_values = [values[field.label] for field in definition.fields]
+        log_path = self._build_log_path(definition.title)
+
+        try:
+            execution_result = self._bridge.execute_scenario(scenario_key, ordered_values, log_path)
+        except BackendBridgeError as exc:
+            self._show_view(
+                ScenarioExecutionErrorView(
+                    self._view_container,
+                    definition,
+                    str(exc),
+                    lambda: self._show_scenario_config_view(scenario_key),
+                )
+            )
+            return
+
+        Path(execution_result.log_path).write_text("\n".join(execution_result.logs) + "\n", encoding="utf-8")
+
+        self._show_view(
+            ScenarioRunView(
+                self._view_container,
+                definition,
+                execution_result.logs,
+                execution_result.log_path,
+                execution_result.summary,
+                self._show_main_menu_view,
+            )
+        )
+
+    def _build_log_path(self, scenario_title: str) -> str:
+        project_root = Path(__file__).resolve().parents[1]
+        logs_directory = project_root / "logs"
+        logs_directory.mkdir(parents=True, exist_ok=True)
+        timestamp = __import__("datetime").datetime.now().strftime("%Y%m%d_%H%M%S")
+        return str(logs_directory / f"{scenario_title}_{timestamp}.txt")
 
     def _on_exit(self) -> None:
         self.destroy()
@@ -385,14 +427,18 @@ class ScenarioConfigView(ttk.Frame):
     def __init__(
         self,
         owner: ttk.Frame,
+        scenario_key: str,
         definition: ScenarioDefinition,
         on_back: Callable[[], None],
         on_tips: Callable[[], None],
+        on_execute: Callable[[dict[str, int]], None],
     ) -> None:
         super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
+        self._scenario_key = scenario_key
         self._definition = definition
         self._on_back = on_back
         self._on_tips = on_tips
+        self._on_execute = on_execute
         self._field_vars: dict[str, tk.StringVar] = {}
         self._info_var = tk.StringVar(value=definition.description)
 
@@ -403,6 +449,8 @@ class ScenarioConfigView(ttk.Frame):
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=0)
+        self.rowconfigure(3, weight=0)
+        self.rowconfigure(4, weight=0)
 
         title = ttk.Label(
             self,
@@ -507,6 +555,7 @@ class ScenarioConfigView(ttk.Frame):
 
         ordered_values = ", ".join(f"{name}={value}" for name, value in values.items())
         self._info_var.set(f"Cenário preparado com sucesso: {ordered_values}")
+        self._on_execute(values)
 
     def _show_tips(self) -> None:
         self._info_var.set(self._definition.tips)
@@ -565,6 +614,205 @@ class ScenarioTipsView(ttk.Frame):
             style="MenuButton.TButton",
             command=self._on_back,
         ).grid(row=2, column=0, sticky="ew", pady=(18, 0))
+
+
+class ScenarioRunView(ttk.Frame):
+    def __init__(
+        self,
+        owner: ttk.Frame,
+        definition: ScenarioDefinition,
+        logs: list[str],
+        log_path: str,
+        summary: str,
+        on_main_menu: Callable[[], None],
+    ) -> None:
+        super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
+        self._definition = definition
+        self._logs = logs
+        self._log_path = log_path
+        self._on_main_menu = on_main_menu
+        self._index = 0
+        self._finished = False
+        self._current_log_var = tk.StringVar(value=logs[0] if logs else "Sem logs disponíveis.")
+        self._status_var = tk.StringVar(value=summary)
+
+        self._build_layout()
+        self._refresh_navigation()
+
+    def _build_layout(self) -> None:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=0)
+
+        title = ttk.Label(
+            self,
+            style="MenuTitle.TLabel",
+            text=f"Acompanhamento - {self._definition.title}",
+        )
+        title.grid(row=0, column=0, sticky="n", pady=(10, 18))
+
+        log_card = ttk.Frame(self, style="MenuCard.TFrame", padding=(24, 24))
+        log_card.grid(row=1, column=0, sticky="nsew")
+        log_card.columnconfigure(0, weight=1)
+        log_card.rowconfigure(0, weight=1)
+
+        self._log_label = ttk.Label(
+            log_card,
+            textvariable=self._current_log_var,
+            style="MenuTitle.TLabel",
+            font=("Segoe UI", 14),
+            justify="center",
+            wraplength=760,
+            anchor="center",
+        )
+        self._log_label.grid(row=0, column=0, sticky="nsew")
+
+        self._status_label = ttk.Label(
+            self,
+            textvariable=self._status_var,
+            style="MenuTitle.TLabel",
+            font=("Segoe UI", 10),
+            wraplength=760,
+        )
+        self._status_label.grid(row=2, column=0, sticky="n", pady=(16, 10))
+
+        path_label = ttk.Label(
+            self,
+            text=f"Log guardado em: {self._log_path}",
+            style="MenuTitle.TLabel",
+            font=("Segoe UI", 9),
+            wraplength=760,
+        )
+        path_label.grid(row=3, column=0, sticky="n", pady=(0, 10))
+
+        controls = ttk.Frame(self, style="MenuCard.TFrame")
+        controls.grid(row=4, column=0, sticky="ew")
+        controls.columnconfigure(0, weight=1)
+        controls.columnconfigure(1, weight=1)
+        controls.columnconfigure(2, weight=1)
+
+        self._previous_button = ttk.Button(
+            controls,
+            text="←",
+            style="MenuButton.TButton",
+            command=self._previous_log,
+        )
+        self._previous_button.grid(row=0, column=0, sticky="ew", padx=(0, 10))
+
+        self._next_button = ttk.Button(
+            controls,
+            text="→",
+            style="MenuButton.TButton",
+            command=self._next_log,
+        )
+        self._next_button.grid(row=0, column=1, sticky="ew", padx=(0, 10))
+
+        self._main_menu_button = ttk.Button(
+            controls,
+            text="Voltar ao menu principal",
+            style="MenuButton.TButton",
+            command=self._on_main_menu,
+        )
+        self._main_menu_button.grid(row=0, column=2, sticky="ew")
+
+    def _refresh_navigation(self) -> None:
+        if self._finished:
+            self._status_var.set("Cenário concluído. A única opção disponível é regressar ao menu principal.")
+            self._previous_button.grid_remove()
+            self._next_button.grid_remove()
+            self._current_log_var.set(self._logs[-1] if self._logs else "Cenário concluído.")
+            self._main_menu_button.state(["!disabled"])
+            return
+
+        self._current_log_var.set(self._logs[self._index])
+        self._status_var.set(f"Log {self._index + 1} de {len(self._logs)}")
+
+        if self._index == 0:
+            self._previous_button.state(["disabled"])
+        else:
+            self._previous_button.state(["!disabled"])
+
+        if self._index >= len(self._logs) - 1:
+            self._next_button.state(["disabled"])
+        else:
+            self._next_button.state(["!disabled"])
+
+    def _previous_log(self) -> None:
+        if self._finished or self._index == 0:
+            return
+
+        self._index -= 1
+        self._refresh_navigation()
+
+    def _next_log(self) -> None:
+        if self._finished:
+            return
+
+        if self._index < len(self._logs) - 1:
+            self._index += 1
+
+        if self._index >= len(self._logs) - 1:
+            self._finished = True
+
+        self._refresh_navigation()
+
+
+class ScenarioExecutionErrorView(ttk.Frame):
+    def __init__(
+        self,
+        owner: ttk.Frame,
+        definition: ScenarioDefinition,
+        error_message: str,
+        on_back: Callable[[], None],
+    ) -> None:
+        super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
+        self._definition = definition
+        self._error_message = error_message
+        self._on_back = on_back
+
+        self._build_layout()
+
+    def _build_layout(self) -> None:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
+
+        title = ttk.Label(
+            self,
+            style="MenuTitle.TLabel",
+            text=f"Erro ao executar - {self._definition.title}",
+        )
+        title.grid(row=0, column=0, sticky="n", pady=(10, 18))
+
+        message = ttk.Label(
+            self,
+            style="MenuTitle.TLabel",
+            text=self._error_message,
+            font=("Segoe UI", 11),
+            wraplength=760,
+            justify="center",
+        )
+        message.grid(row=1, column=0, sticky="n", pady=(12, 12))
+
+        ttk.Button(
+            self,
+            text="Voltar à configuração do cenário",
+            style="MenuButton.TButton",
+            command=self._on_back,
+        ).grid(row=2, column=0, sticky="ew")
+
+    def _next_log(self) -> None:
+        if self._finished:
+            return
+
+        if self._index < len(self._logs) - 1:
+            self._index += 1
+
+        if self._index >= len(self._logs) - 1:
+            self._finished = True
+
+        self._refresh_navigation()
 
 
 

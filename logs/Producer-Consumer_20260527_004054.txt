@@ -1,0 +1,173 @@
+[Producer-Consumer] Início do acompanhamento em tempo real.
+[Producer-Consumer] Parâmetros: produtores=20, consumidores=21, buffer=5, items por produtor=1.
+[Producer-Consumer] O buffer inicia vazio com capacidade para 5 itens.
+[Producer-Consumer] O mutex protege o acesso à fila partilhada.
+[Producer-Consumer] Os semáforos controlam slots vazios e slots ocupados.
+[Producer-Consumer] Produtor 1 entrou em execução.
+[Producer-Consumer] Produtor 1 prepara o item 1001 (item 1 de 1).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1001.
+[Producer-Consumer] Produtor 1 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 2 entrou em execução.
+[Producer-Consumer] Produtor 2 prepara o item 2001 (item 1 de 1).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2001.
+[Producer-Consumer] Produtor 2 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 3 entrou em execução.
+[Producer-Consumer] Produtor 3 prepara o item 3001 (item 1 de 1).
+[Producer-Consumer] Produtor 3 aguarda espaço no buffer para inserir o item 3001.
+[Producer-Consumer] Produtor 3 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 4 entrou em execução.
+[Producer-Consumer] Produtor 4 prepara o item 4001 (item 1 de 1).
+[Producer-Consumer] Produtor 4 aguarda espaço no buffer para inserir o item 4001.
+[Producer-Consumer] Produtor 4 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 5 entrou em execução.
+[Producer-Consumer] Produtor 5 prepara o item 5001 (item 1 de 1).
+[Producer-Consumer] Produtor 5 aguarda espaço no buffer para inserir o item 5001.
+[Producer-Consumer] Produtor 5 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 6 entrou em execução.
+[Producer-Consumer] Produtor 6 prepara o item 6001 (item 1 de 1).
+[Producer-Consumer] Produtor 6 aguarda espaço no buffer para inserir o item 6001.
+[Producer-Consumer] Produtor 6 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 7 entrou em execução.
+[Producer-Consumer] Produtor 7 prepara o item 7001 (item 1 de 1).
+[Producer-Consumer] Produtor 7 aguarda espaço no buffer para inserir o item 7001.
+[Producer-Consumer] Produtor 7 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 8 entrou em execução.
+[Producer-Consumer] Produtor 8 prepara o item 8001 (item 1 de 1).
+[Producer-Consumer] Produtor 8 aguarda espaço no buffer para inserir o item 8001.
+[Producer-Consumer] Produtor 8 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 9 entrou em execução.
+[Producer-Consumer] Produtor 9 prepara o item 9001 (item 1 de 1).
+[Producer-Consumer] Produtor 9 aguarda espaço no buffer para inserir o item 9001.
+[Producer-Consumer] Produtor 9 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 10 entrou em execução.
+[Producer-Consumer] Produtor 10 prepara o item 10001 (item 1 de 1).
+[Producer-Consumer] Produtor 10 aguarda espaço no buffer para inserir o item 10001.
+[Producer-Consumer] Produtor 10 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 11 entrou em execução.
+[Producer-Consumer] Produtor 11 prepara o item 11001 (item 1 de 1).
+[Producer-Consumer] Produtor 11 aguarda espaço no buffer para inserir o item 11001.
+[Producer-Consumer] Produtor 11 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 12 entrou em execução.
+[Producer-Consumer] Produtor 12 prepara o item 12001 (item 1 de 1).
+[Producer-Consumer] Produtor 12 aguarda espaço no buffer para inserir o item 12001.
+[Producer-Consumer] Produtor 12 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 13 entrou em execução.
+[Producer-Consumer] Produtor 13 prepara o item 13001 (item 1 de 1).
+[Producer-Consumer] Produtor 13 aguarda espaço no buffer para inserir o item 13001.
+[Producer-Consumer] Produtor 13 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 14 entrou em execução.
+[Producer-Consumer] Produtor 14 prepara o item 14001 (item 1 de 1).
+[Producer-Consumer] Produtor 14 aguarda espaço no buffer para inserir o item 14001.
+[Producer-Consumer] Produtor 14 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 15 entrou em execução.
+[Producer-Consumer] Produtor 15 prepara o item 15001 (item 1 de 1).
+[Producer-Consumer] Produtor 15 aguarda espaço no buffer para inserir o item 15001.
+[Producer-Consumer] Produtor 15 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 16 entrou em execução.
+[Producer-Consumer] Produtor 16 prepara o item 16001 (item 1 de 1).
+[Producer-Consumer] Produtor 16 aguarda espaço no buffer para inserir o item 16001.
+[Producer-Consumer] Produtor 16 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 17 entrou em execução.
+[Producer-Consumer] Produtor 17 prepara o item 17001 (item 1 de 1).
+[Producer-Consumer] Produtor 17 aguarda espaço no buffer para inserir o item 17001.
+[Producer-Consumer] Produtor 17 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 18 entrou em execução.
+[Producer-Consumer] Produtor 18 prepara o item 18001 (item 1 de 1).
+[Producer-Consumer] Produtor 18 aguarda espaço no buffer para inserir o item 18001.
+[Producer-Consumer] Produtor 18 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 19 entrou em execução.
+[Producer-Consumer] Produtor 19 prepara o item 19001 (item 1 de 1).
+[Producer-Consumer] Produtor 19 aguarda espaço no buffer para inserir o item 19001.
+[Producer-Consumer] Produtor 19 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Produtor 20 entrou em execução.
+[Producer-Consumer] Produtor 20 prepara o item 20001 (item 1 de 1).
+[Producer-Consumer] Produtor 20 aguarda espaço no buffer para inserir o item 20001.
+[Producer-Consumer] Produtor 20 terminou de produzir os 1 itens atribuídos.
+[Producer-Consumer] Consumidor 1 entrou em execução.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 1 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 2 entrou em execução.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 2 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 3 entrou em execução.
+[Producer-Consumer] Consumidor 3 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 3 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 3 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 4 entrou em execução.
+[Producer-Consumer] Consumidor 4 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 4 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 4 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 5 entrou em execução.
+[Producer-Consumer] Consumidor 5 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 5 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 5 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 6 entrou em execução.
+[Producer-Consumer] Consumidor 6 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 6 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 6 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 7 entrou em execução.
+[Producer-Consumer] Consumidor 7 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 7 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 7 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 8 entrou em execução.
+[Producer-Consumer] Consumidor 8 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 8 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 8 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 9 entrou em execução.
+[Producer-Consumer] Consumidor 9 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 9 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 9 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 10 entrou em execução.
+[Producer-Consumer] Consumidor 10 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 10 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 10 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 11 entrou em execução.
+[Producer-Consumer] Consumidor 11 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 11 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 11 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 12 entrou em execução.
+[Producer-Consumer] Consumidor 12 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 12 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 12 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 13 entrou em execução.
+[Producer-Consumer] Consumidor 13 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 13 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 13 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 14 entrou em execução.
+[Producer-Consumer] Consumidor 14 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 14 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 14 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 15 entrou em execução.
+[Producer-Consumer] Consumidor 15 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 15 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 15 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 16 entrou em execução.
+[Producer-Consumer] Consumidor 16 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 16 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 16 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 17 entrou em execução.
+[Producer-Consumer] Consumidor 17 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 17 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 17 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 18 entrou em execução.
+[Producer-Consumer] Consumidor 18 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 18 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 18 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 19 entrou em execução.
+[Producer-Consumer] Consumidor 19 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 19 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 19 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 20 entrou em execução.
+[Producer-Consumer] Consumidor 20 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 20 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 20 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 21 entrou em execução.
+[Producer-Consumer] Consumidor 21 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 21 retira um item do buffer e processa-o.
+[Producer-Consumer] Consumidor 21 terminou a sua sequência de consumo.
+[Producer-Consumer] O buffer foi esvaziado gradualmente à medida que os consumidores avançam.
+[Producer-Consumer] A alternância entre produção e consumo é visível nos blocos de espera.
+[Producer-Consumer] O acesso exclusivo ao buffer manteve a estrutura consistente durante toda a execução.
+[Producer-Consumer] Cenário concluído.

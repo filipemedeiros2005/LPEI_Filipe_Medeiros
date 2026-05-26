@@ -13,6 +13,13 @@ class FrontendMetadata:
     ready_message: str
 
 
+@dataclass(frozen=True)
+class ScenarioExecutionResult:
+    log_path: str
+    logs: list[str]
+    summary: str
+
+
 class BackendBridgeError(RuntimeError):
     pass
 
@@ -68,3 +75,13 @@ class BackendBridge:
     def initialize_session(self) -> str:
         bridge_type = self._load_bridge_type()
         return str(bridge_type.InitializeSession())
+
+    def execute_scenario(self, scenario_key: str, values: list[int], log_path: str) -> ScenarioExecutionResult:
+        bridge_type = self._load_bridge_type()
+        execution_result = bridge_type.ExecuteScenario(scenario_key, values, log_path)
+
+        return ScenarioExecutionResult(
+            log_path=str(execution_result.LogPath),
+            logs=[str(log_entry) for log_entry in execution_result.Logs],
+            summary=str(execution_result.Summary),
+        )
