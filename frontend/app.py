@@ -94,6 +94,47 @@ SCENARIO_DEFINITIONS = {
 }
 
 
+FUNDAMENTAL_TOPICS: tuple[tuple[str, str], ...] = (
+    (
+        "1. O que é programação concorrente",
+        "Programação concorrente é a organização de tarefas que podem progredir em paralelo ou de forma intercalada. "
+        "O objetivo não é apenas acelerar a execução, mas também modelar problemas em que várias atividades precisam "
+        "de partilhar recursos, esperar umas pelas outras ou avançar em fases coordenadas.",
+    ),
+    (
+        "2. Processos, threads e partilha de memória",
+        "Um processo é uma instância isolada de execução. Threads vivem dentro de um processo e partilham o mesmo espaço "
+        "de memória, o que facilita a troca de dados mas aumenta o risco de interferências. Nesta aplicação, os cenários "
+        "mostram precisamente como essa partilha exige controlo cuidadoso.",
+    ),
+    (
+        "3. Secções críticas e condições de corrida",
+        "Uma secção crítica é a parte do código que acede a um recurso partilhado. Se duas threads entrarem ao mesmo tempo "
+        "sem proteção adequada, pode surgir uma condição de corrida: o resultado passa a depender da ordem exata de execução, "
+        "e esse comportamento pode variar entre execuções.",
+    ),
+    (
+        "4. Exclusão mútua e sincronização",
+        "A exclusão mútua impede que mais do que uma thread altere um recurso sensível em simultâneo. Já a sincronização "
+        "serve para coordenar momentos específicos de execução, por exemplo quando várias threads precisam de terminar uma "
+        "fase antes de avançarem para a seguinte. Mutexes, semáforos e barreiras são mecanismos clássicos para estes casos.",
+    ),
+    (
+        "5. Problemas clássicos demonstrados aqui",
+        "Producer-Consumer mostra a coordenação entre quem produz e quem consome dados num buffer limitado. Readers-Writers "
+        "ilustra o equilíbrio entre múltiplos leitores e escritores num recurso partilhado. Dining Philosophers evidencia "
+        "contenção por recursos e o risco de deadlock. Barrier Synchronization mostra como forçar vários workers a esperar "
+        "uns pelos outros antes de prosseguirem.",
+    ),
+    (
+        "6. Interpretação dos logs",
+        "Os logs ajudam a observar a ordem real dos eventos. Em programação concorrente, isso é importante porque o comportamento "
+        "não é apenas definido pelo algoritmo, mas também pelo agendamento das threads, pelo tempo de espera e pela forma como "
+        "os recursos são protegidos. Ler os logs com atenção ajuda a perceber bloqueios, alternância entre threads e fases de espera.",
+    ),
+)
+
+
 class SimulatorStartView(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
@@ -200,7 +241,18 @@ class SimulatorStartView(tk.Tk):
         self._show_main_menu_view()
 
     def _show_main_menu_view(self) -> None:
-        self._show_view(MainMenuView(self._view_container, self._on_exit, self._show_scenarios_view))
+        self._show_view(
+            MainMenuView(
+                self._view_container,
+                self._on_exit,
+                self._show_scenarios_view,
+                self._show_fundamentals_view,
+            )
+        )
+
+    def _show_fundamentals_view(self) -> None:
+        self.title("Conceitos Fundamentais")
+        self._show_view(FundamentalsView(self._view_container, self._show_main_menu_view))
 
     def _show_scenarios_view(self) -> None:
         self.title("Lista de Cenários")
@@ -311,10 +363,12 @@ class MainMenuView(ttk.Frame):
         owner: ttk.Frame,
         on_exit: Callable[[], None],
         on_scenarios: Callable[[], None],
+        on_fundamentals: Callable[[], None],
     ) -> None:
         super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
         self._on_exit = on_exit
         self._on_scenarios = on_scenarios
+        self._on_fundamentals = on_fundamentals
 
         self._build_layout()
 
@@ -345,7 +399,7 @@ class MainMenuView(ttk.Frame):
             buttons_frame,
             text="Conceitos Fundamentais",
             style="MenuButton.TButton",
-            command=self._open_fundamentals,
+            command=self._on_fundamentals,
         ).grid(row=1, column=0, sticky="ew", pady=(0, 14))
 
         ttk.Button(
@@ -354,10 +408,6 @@ class MainMenuView(ttk.Frame):
             style="MenuButton.TButton",
             command=self._on_exit,
         ).grid(row=2, column=0, sticky="ew")
-
-    def _open_fundamentals(self) -> None:
-        return
-
 
 class ScenariosView(ttk.Frame):
     def __init__(
@@ -422,6 +472,81 @@ class ScenariosView(ttk.Frame):
             style="MenuButton.TButton",
             command=self._on_back,
         ).grid(row=4, column=0, sticky="ew")
+
+
+class FundamentalsView(ttk.Frame):
+    def __init__(self, owner: ttk.Frame, on_back: Callable[[], None]) -> None:
+        super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
+        self._on_back = on_back
+
+        self._build_layout()
+
+    def _build_layout(self) -> None:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=0)
+
+        title = ttk.Label(
+            self,
+            style="MenuTitle.TLabel",
+            text="Conceitos Fundamentais",
+        )
+        title.grid(row=0, column=0, sticky="n", pady=(10, 18))
+
+        content_card = ttk.Frame(self, style="MenuCard.TFrame")
+        content_card.grid(row=1, column=0, sticky="nsew")
+        content_card.columnconfigure(0, weight=1)
+        content_card.rowconfigure(0, weight=1)
+
+        scrollbar = ttk.Scrollbar(content_card, orient="vertical")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+
+        content = tk.Text(
+            content_card,
+            wrap="word",
+            relief="flat",
+            bg="#111c2f",
+            fg="#f8fafc",
+            insertbackground="#f8fafc",
+            font=("Segoe UI", 11),
+            padx=18,
+            pady=18,
+            borderwidth=0,
+            yscrollcommand=scrollbar.set,
+        )
+        content.grid(row=0, column=0, sticky="nsew")
+        scrollbar.config(command=content.yview)
+
+        content.insert("1.0", self._build_content())
+        content.configure(state="disabled")
+
+        ttk.Button(
+            self,
+            text="Voltar ao menu principal",
+            style="MenuButton.TButton",
+            command=self._on_back,
+        ).grid(row=2, column=0, sticky="ew", pady=(18, 0))
+
+    def _build_content(self) -> str:
+        paragraphs: list[str] = []
+
+        intro = (
+            "Esta secção resume os conceitos que ajudam a interpretar os cenários desta aplicação. "
+            "A leitura destes tópicos dá contexto ao comportamento observado nos logs e nas fases de sincronização.\n\n"
+        )
+        paragraphs.append(intro)
+
+        for heading, body in FUNDAMENTAL_TOPICS:
+            paragraphs.append(f"{heading}\n{body}\n\n")
+
+        conclusion = (
+            "Sugestão de leitura: começa por secções críticas, exclusão mútua e sincronização, "
+            "e depois revê cada cenário procurando identificar onde esses mecanismos aparecem na prática."
+        )
+        paragraphs.append(conclusion)
+
+        return "".join(paragraphs)
 
 class ScenarioConfigView(ttk.Frame):
     def __init__(
@@ -694,7 +819,7 @@ class ScenarioRunView(ttk.Frame):
 
         self._previous_button = ttk.Button(
             controls,
-            text="←",
+            text="Anterior",
             style="MenuButton.TButton",
             command=self._previous_log,
         )
@@ -702,7 +827,7 @@ class ScenarioRunView(ttk.Frame):
 
         self._next_button = ttk.Button(
             controls,
-            text="→",
+            text="Próximo",
             style="MenuButton.TButton",
             command=self._next_log,
         )

@@ -157,6 +157,8 @@ internal static class ScenarioExecutionEngine
         int consumers = values[1];
         int bufferSize = values[2];
         int itemsPerProducer = values[3];
+        int totalProduced = 0;
+        int totalConsumed = 0;
 
         logs.Add("[Producer-Consumer] Início do acompanhamento em tempo real.");
         logs.Add(string.Format("[Producer-Consumer] Parâmetros: produtores={0}, consumidores={1}, buffer={2}, items por produtor={3}.", producers, consumers, bufferSize, itemsPerProducer));
@@ -167,29 +169,50 @@ internal static class ScenarioExecutionEngine
         for (int producerId = 1; producerId <= producers; producerId++)
         {
             logs.Add(string.Format("[Producer-Consumer] Produtor {0} entrou em execução.", producerId));
-
-            for (int itemIndex = 1; itemIndex <= itemsPerProducer; itemIndex++)
-            {
-                int itemId = (producerId * 1000) + itemIndex;
-                logs.Add(string.Format("[Producer-Consumer] Produtor {0} prepara o item {1} (item {2} de {3}).", producerId, itemId, itemIndex, itemsPerProducer));
-                logs.Add(string.Format("[Producer-Consumer] Produtor {0} aguarda espaço no buffer para inserir o item {1}.", producerId, itemId));
-                logs.Add(string.Format("[Producer-Consumer] BUFFER: produtor {0} reservaria um slot para o item {1}.", producerId, itemId));
-            }
-
-            logs.Add(string.Format("[Producer-Consumer] Produtor {0} terminou de produzir os {1} itens atribuídos.", producerId, itemsPerProducer));
         }
 
         for (int consumerId = 1; consumerId <= consumers; consumerId++)
         {
             logs.Add(string.Format("[Producer-Consumer] Consumidor {0} entrou em execução.", consumerId));
+        }
 
-            for (int itemIndex = 1; itemIndex <= itemsPerProducer; itemIndex++)
+        int totalItems = producers * itemsPerProducer;
+        int maxRounds = itemsPerProducer;
+
+        for (int roundIndex = 1; roundIndex <= maxRounds; roundIndex++)
+        {
+            for (int producerId = 1; producerId <= producers; producerId++)
             {
-                logs.Add(string.Format("[Producer-Consumer] Consumidor {0} aguarda um item disponível para a sua ronda {1}.", consumerId, itemIndex));
-                logs.Add(string.Format("[Producer-Consumer] Consumidor {0} retira um item do buffer e processa-o.", consumerId));
-                logs.Add(string.Format("[Producer-Consumer] BUFFER: consumidor {0} libertaria um slot após consumir.", consumerId));
+                if (roundIndex <= itemsPerProducer)
+                {
+                    int itemId = (producerId * 1000) + roundIndex;
+                    logs.Add(string.Format("[Producer-Consumer] Produtor {0} prepara o item {1} (item {2} de {3}).", producerId, itemId, roundIndex, itemsPerProducer));
+                    logs.Add(string.Format("[Producer-Consumer] Produtor {0} aguarda espaço no buffer para inserir o item {1}.", producerId, itemId));
+                    logs.Add(string.Format("[Producer-Consumer] BUFFER: produtor {0} reservaria um slot para o item {1}.", producerId, itemId));
+                    totalProduced++;
+                }
             }
 
+            for (int consumerId = 1; consumerId <= consumers; consumerId++)
+            {
+                if (totalConsumed < totalItems && totalProduced > totalConsumed)
+                {
+                    int consumeIndex = totalConsumed + 1;
+                    logs.Add(string.Format("[Producer-Consumer] Consumidor {0} aguarda um item disponível para a sua ronda {1}.", consumerId, roundIndex));
+                    logs.Add(string.Format("[Producer-Consumer] Consumidor {0} retira um item do buffer e processa-o.", consumerId));
+                    logs.Add(string.Format("[Producer-Consumer] BUFFER: consumidor {0} libertaria um slot após consumir.", consumerId));
+                    totalConsumed = consumeIndex;
+                }
+            }
+        }
+
+        for (int producerId = 1; producerId <= producers; producerId++)
+        {
+            logs.Add(string.Format("[Producer-Consumer] Produtor {0} terminou de produzir os {1} itens atribuídos.", producerId, itemsPerProducer));
+        }
+
+        for (int consumerId = 1; consumerId <= consumers; consumerId++)
+        {
             logs.Add(string.Format("[Producer-Consumer] Consumidor {0} terminou a sua sequência de consumo.", consumerId));
         }
 
@@ -214,26 +237,35 @@ internal static class ScenarioExecutionEngine
         for (int readerId = 1; readerId <= readers; readerId++)
         {
             logs.Add(string.Format("[Readers-Writers] Leitor {0} iniciou a sua sequência.", readerId));
-
-            for (int iteration = 1; iteration <= iterations; iteration++)
-            {
-                logs.Add(string.Format("[Readers-Writers] Leitor {0} entra na iteração {1} e solicita leitura partilhada.", readerId, iteration));
-                logs.Add(string.Format("[Readers-Writers] Leitor {0} lê o valor disponível sem bloquear os restantes leitores.", readerId));
-            }
-
-            logs.Add(string.Format("[Readers-Writers] Leitor {0} concluiu as {1} leituras.", readerId, iterations));
         }
 
         for (int writerId = 1; writerId <= writers; writerId++)
         {
             logs.Add(string.Format("[Readers-Writers] Escritor {0} iniciou a sua sequência.", writerId));
+        }
 
-            for (int iteration = 1; iteration <= iterations; iteration++)
+        for (int iteration = 1; iteration <= iterations; iteration++)
+        {
+            for (int readerId = 1; readerId <= readers; readerId++)
+            {
+                logs.Add(string.Format("[Readers-Writers] Leitor {0} entra na iteração {1} e solicita leitura partilhada.", readerId, iteration));
+                logs.Add(string.Format("[Readers-Writers] Leitor {0} lê o valor disponível sem bloquear os restantes leitores.", readerId));
+            }
+
+            for (int writerId = 1; writerId <= writers; writerId++)
             {
                 logs.Add(string.Format("[Readers-Writers] Escritor {0} entra na iteração {1} e aguarda acesso exclusivo.", writerId, iteration));
                 logs.Add(string.Format("[Readers-Writers] Escritor {0} atualiza o valor partilhado de forma exclusiva.", writerId));
             }
+        }
 
+        for (int readerId = 1; readerId <= readers; readerId++)
+        {
+            logs.Add(string.Format("[Readers-Writers] Leitor {0} concluiu as {1} leituras.", readerId, iterations));
+        }
+
+        for (int writerId = 1; writerId <= writers; writerId++)
+        {
             logs.Add(string.Format("[Readers-Writers] Escritor {0} concluiu as {1} escritas.", writerId, iterations));
         }
 
@@ -256,14 +288,20 @@ internal static class ScenarioExecutionEngine
         for (int philosopherId = 1; philosopherId <= philosophers; philosopherId++)
         {
             logs.Add(string.Format("[Dining Philosophers] Filósofo {0} entra em cena.", philosopherId));
+        }
 
-            for (int roundIndex = 1; roundIndex <= rounds; roundIndex++)
+        for (int roundIndex = 1; roundIndex <= rounds; roundIndex++)
+        {
+            for (int philosopherId = 1; philosopherId <= philosophers; philosopherId++)
             {
                 logs.Add(string.Format("[Dining Philosophers] Filósofo {0} pensa na ronda {1}.", philosopherId, roundIndex));
                 logs.Add(string.Format("[Dining Philosophers] Filósofo {0} tenta recolher os garfos para comer na ronda {1}.", philosopherId, roundIndex));
                 logs.Add(string.Format("[Dining Philosophers] Filósofo {0} completa a ronda {1} e volta a pensar.", philosopherId, roundIndex));
             }
+        }
 
+        for (int philosopherId = 1; philosopherId <= philosophers; philosopherId++)
+        {
             logs.Add(string.Format("[Dining Philosophers] Filósofo {0} concluiu as {1} rondas.", philosopherId, rounds));
         }
 

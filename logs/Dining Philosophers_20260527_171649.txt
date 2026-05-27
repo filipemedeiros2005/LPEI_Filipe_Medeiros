@@ -1,0 +1,78 @@
+[Dining Philosophers] Início do acompanhamento em tempo real.
+[Dining Philosophers] Parâmetros: filósofos=5, rondas por filósofo=4.
+[Dining Philosophers] Todos os filósofos começam a pensar antes de tentar comer.
+[Dining Philosophers] Os garfos são recursos exclusivos partilhados pelos filósofos adjacentes.
+[Dining Philosophers] A inversão de ordem no último filósofo evita espera circular.
+[Dining Philosophers] Filósofo 1 entra em cena.
+[Dining Philosophers] Filósofo 2 entra em cena.
+[Dining Philosophers] Filósofo 3 entra em cena.
+[Dining Philosophers] Filósofo 4 entra em cena.
+[Dining Philosophers] Filósofo 5 entra em cena.
+[Dining Philosophers] Filósofo 1 pensa na ronda 1.
+[Dining Philosophers] Filósofo 1 tenta recolher os garfos para comer na ronda 1.
+[Dining Philosophers] Filósofo 1 completa a ronda 1 e volta a pensar.
+[Dining Philosophers] Filósofo 2 pensa na ronda 1.
+[Dining Philosophers] Filósofo 2 tenta recolher os garfos para comer na ronda 1.
+[Dining Philosophers] Filósofo 2 completa a ronda 1 e volta a pensar.
+[Dining Philosophers] Filósofo 3 pensa na ronda 1.
+[Dining Philosophers] Filósofo 3 tenta recolher os garfos para comer na ronda 1.
+[Dining Philosophers] Filósofo 3 completa a ronda 1 e volta a pensar.
+[Dining Philosophers] Filósofo 4 pensa na ronda 1.
+[Dining Philosophers] Filósofo 4 tenta recolher os garfos para comer na ronda 1.
+[Dining Philosophers] Filósofo 4 completa a ronda 1 e volta a pensar.
+[Dining Philosophers] Filósofo 5 pensa na ronda 1.
+[Dining Philosophers] Filósofo 5 tenta recolher os garfos para comer na ronda 1.
+[Dining Philosophers] Filósofo 5 completa a ronda 1 e volta a pensar.
+[Dining Philosophers] Filósofo 1 pensa na ronda 2.
+[Dining Philosophers] Filósofo 1 tenta recolher os garfos para comer na ronda 2.
+[Dining Philosophers] Filósofo 1 completa a ronda 2 e volta a pensar.
+[Dining Philosophers] Filósofo 2 pensa na ronda 2.
+[Dining Philosophers] Filósofo 2 tenta recolher os garfos para comer na ronda 2.
+[Dining Philosophers] Filósofo 2 completa a ronda 2 e volta a pensar.
+[Dining Philosophers] Filósofo 3 pensa na ronda 2.
+[Dining Philosophers] Filósofo 3 tenta recolher os garfos para comer na ronda 2.
+[Dining Philosophers] Filósofo 3 completa a ronda 2 e volta a pensar.
+[Dining Philosophers] Filósofo 4 pensa na ronda 2.
+[Dining Philosophers] Filósofo 4 tenta recolher os garfos para comer na ronda 2.
+[Dining Philosophers] Filósofo 4 completa a ronda 2 e volta a pensar.
+[Dining Philosophers] Filósofo 5 pensa na ronda 2.
+[Dining Philosophers] Filósofo 5 tenta recolher os garfos para comer na ronda 2.
+[Dining Philosophers] Filósofo 5 completa a ronda 2 e volta a pensar.
+[Dining Philosophers] Filósofo 1 pensa na ronda 3.
+[Dining Philosophers] Filósofo 1 tenta recolher os garfos para comer na ronda 3.
+[Dining Philosophers] Filósofo 1 completa a ronda 3 e volta a pensar.
+[Dining Philosophers] Filósofo 2 pensa na ronda 3.
+[Dining Philosophers] Filósofo 2 tenta recolher os garfos para comer na ronda 3.
+[Dining Philosophers] Filósofo 2 completa a ronda 3 e volta a pensar.
+[Dining Philosophers] Filósofo 3 pensa na ronda 3.
+[Dining Philosophers] Filósofo 3 tenta recolher os garfos para comer na ronda 3.
+[Dining Philosophers] Filósofo 3 completa a ronda 3 e volta a pensar.
+[Dining Philosophers] Filósofo 4 pensa na ronda 3.
+[Dining Philosophers] Filósofo 4 tenta recolher os garfos para comer na ronda 3.
+[Dining Philosophers] Filósofo 4 completa a ronda 3 e volta a pensar.
+[Dining Philosophers] Filósofo 5 pensa na ronda 3.
+[Dining Philosophers] Filósofo 5 tenta recolher os garfos para comer na ronda 3.
+[Dining Philosophers] Filósofo 5 completa a ronda 3 e volta a pensar.
+[Dining Philosophers] Filósofo 1 pensa na ronda 4.
+[Dining Philosophers] Filósofo 1 tenta recolher os garfos para comer na ronda 4.
+[Dining Philosophers] Filósofo 1 completa a ronda 4 e volta a pensar.
+[Dining Philosophers] Filósofo 2 pensa na ronda 4.
+[Dining Philosophers] Filósofo 2 tenta recolher os garfos para comer na ronda 4.
+[Dining Philosophers] Filósofo 2 completa a ronda 4 e volta a pensar.
+[Dining Philosophers] Filósofo 3 pensa na ronda 4.
+[Dining Philosophers] Filósofo 3 tenta recolher os garfos para comer na ronda 4.
+[Dining Philosophers] Filósofo 3 completa a ronda 4 e volta a pensar.
+[Dining Philosophers] Filósofo 4 pensa na ronda 4.
+[Dining Philosophers] Filósofo 4 tenta recolher os garfos para comer na ronda 4.
+[Dining Philosophers] Filósofo 4 completa a ronda 4 e volta a pensar.
+[Dining Philosophers] Filósofo 5 pensa na ronda 4.
+[Dining Philosophers] Filósofo 5 tenta recolher os garfos para comer na ronda 4.
+[Dining Philosophers] Filósofo 5 completa a ronda 4 e volta a pensar.
+[Dining Philosophers] Filósofo 1 concluiu as 4 rondas.
+[Dining Philosophers] Filósofo 2 concluiu as 4 rondas.
+[Dining Philosophers] Filósofo 3 concluiu as 4 rondas.
+[Dining Philosophers] Filósofo 4 concluiu as 4 rondas.
+[Dining Philosophers] Filósofo 5 concluiu as 4 rondas.
+[Dining Philosophers] A contenção aumenta quando o número de filósofos sobe sem ajustar os recursos.
+[Dining Philosophers] Um número excessivo de rondas gera repetição e prolonga a análise.
+[Dining Philosophers] Cenário concluído.
