@@ -1,0 +1,25 @@
+[Producer-Consumer] Início do acompanhamento em tempo real.
+[Producer-Consumer] Parâmetros: produtores=1, consumidores=1, buffer=5, items por produtor=2.
+[Producer-Consumer] O buffer inicia vazio com capacidade para 5 itens.
+[Producer-Consumer] O mutex protege o acesso à fila partilhada.
+[Producer-Consumer] Os semáforos controlam slots vazios e slots ocupados.
+[Producer-Consumer] Produtor 1 entrou em execução.
+[Producer-Consumer] Consumidor 1 entrou em execução.
+[Producer-Consumer] Produtor 1 prepara o item 1001 (item 1 de 2).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1001.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1001.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1002 (item 2 de 2).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1002.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1002.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 2.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 terminou de produzir os 2 itens atribuídos.
+[Producer-Consumer] Consumidor 1 terminou a sua sequência de consumo.
+[Producer-Consumer] O buffer foi esvaziado gradualmente à medida que os consumidores avançam.
+[Producer-Consumer] A alternância entre produção e consumo é visível nos blocos de espera.
+[Producer-Consumer] O acesso exclusivo ao buffer manteve a estrutura consistente durante toda a execução.
+[Producer-Consumer] Cenário concluído.

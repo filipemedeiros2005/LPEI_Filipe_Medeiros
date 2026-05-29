@@ -1,0 +1,137 @@
+[Producer-Consumer] Início do acompanhamento em tempo real.
+[Producer-Consumer] Parâmetros: produtores=2, consumidores=2, buffer=5, items por produtor=10.
+[Producer-Consumer] O buffer inicia vazio com capacidade para 5 itens.
+[Producer-Consumer] O mutex protege o acesso à fila partilhada.
+[Producer-Consumer] Os semáforos controlam slots vazios e slots ocupados.
+[Producer-Consumer] Produtor 1 entrou em execução.
+[Producer-Consumer] Produtor 2 entrou em execução.
+[Producer-Consumer] Consumidor 1 entrou em execução.
+[Producer-Consumer] Consumidor 2 entrou em execução.
+[Producer-Consumer] Produtor 1 prepara o item 1001 (item 1 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1001.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1001.
+[Producer-Consumer] Produtor 2 prepara o item 2001 (item 1 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2001.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2001.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 1.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1002 (item 2 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1002.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1002.
+[Producer-Consumer] Produtor 2 prepara o item 2002 (item 2 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2002.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2002.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 2.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 2.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1003 (item 3 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1003.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1003.
+[Producer-Consumer] Produtor 2 prepara o item 2003 (item 3 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2003.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2003.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 3.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 3.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1004 (item 4 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1004.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1004.
+[Producer-Consumer] Produtor 2 prepara o item 2004 (item 4 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2004.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2004.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 4.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 4.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1005 (item 5 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1005.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1005.
+[Producer-Consumer] Produtor 2 prepara o item 2005 (item 5 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2005.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2005.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 5.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 5.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1006 (item 6 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1006.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1006.
+[Producer-Consumer] Produtor 2 prepara o item 2006 (item 6 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2006.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2006.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 6.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 6.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1007 (item 7 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1007.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1007.
+[Producer-Consumer] Produtor 2 prepara o item 2007 (item 7 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2007.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2007.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 7.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 7.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1008 (item 8 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1008.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1008.
+[Producer-Consumer] Produtor 2 prepara o item 2008 (item 8 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2008.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2008.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 8.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 8.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1009 (item 9 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1009.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1009.
+[Producer-Consumer] Produtor 2 prepara o item 2009 (item 9 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2009.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2009.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 9.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 9.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 prepara o item 1010 (item 10 de 10).
+[Producer-Consumer] Produtor 1 aguarda espaço no buffer para inserir o item 1010.
+[Producer-Consumer] BUFFER: produtor 1 reservaria um slot para o item 1010.
+[Producer-Consumer] Produtor 2 prepara o item 2010 (item 10 de 10).
+[Producer-Consumer] Produtor 2 aguarda espaço no buffer para inserir o item 2010.
+[Producer-Consumer] BUFFER: produtor 2 reservaria um slot para o item 2010.
+[Producer-Consumer] Consumidor 1 aguarda um item disponível para a sua ronda 10.
+[Producer-Consumer] Consumidor 1 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 1 libertaria um slot após consumir.
+[Producer-Consumer] Consumidor 2 aguarda um item disponível para a sua ronda 10.
+[Producer-Consumer] Consumidor 2 retira um item do buffer e processa-o.
+[Producer-Consumer] BUFFER: consumidor 2 libertaria um slot após consumir.
+[Producer-Consumer] Produtor 1 terminou de produzir os 10 itens atribuídos.
+[Producer-Consumer] Produtor 2 terminou de produzir os 10 itens atribuídos.
+[Producer-Consumer] Consumidor 1 terminou a sua sequência de consumo.
+[Producer-Consumer] Consumidor 2 terminou a sua sequência de consumo.
+[Producer-Consumer] O buffer foi esvaziado gradualmente à medida que os consumidores avançam.
+[Producer-Consumer] A alternância entre produção e consumo é visível nos blocos de espera.
+[Producer-Consumer] O acesso exclusivo ao buffer manteve a estrutura consistente durante toda a execução.
+[Producer-Consumer] Cenário concluído.
