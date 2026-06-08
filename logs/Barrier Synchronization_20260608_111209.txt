@@ -1,0 +1,26 @@
+[Barrier Synchronization] Início do acompanhamento em tempo real.
+[Barrier Synchronization] Parâmetros: workers=4, fases=3.
+[Barrier Synchronization] Cada worker progride fase a fase até encontrar a barreira.
+[Barrier Synchronization] A barreira só é ultrapassada quando todos os workers chegam.
+[Barrier Synchronization] O tempo de espera cresce quando há mais workers ou mais fases.
+[Barrier Synchronization] Fase 1: os workers iniciam processamento.
+[Barrier Synchronization] Worker 1 conclui a fase 1 e aguarda na barreira.
+[Barrier Synchronization] Worker 2 conclui a fase 1 e aguarda na barreira.
+[Barrier Synchronization] Worker 3 conclui a fase 1 e aguarda na barreira.
+[Barrier Synchronization] Worker 4 conclui a fase 1 e aguarda na barreira.
+[Barrier Synchronization] Fase 1 concluída; todos os workers avançam em conjunto.
+[Barrier Synchronization] Fase 2: os workers iniciam processamento.
+[Barrier Synchronization] Worker 1 conclui a fase 2 e aguarda na barreira.
+[Barrier Synchronization] Worker 2 conclui a fase 2 e aguarda na barreira.
+[Barrier Synchronization] Worker 3 conclui a fase 2 e aguarda na barreira.
+[Barrier Synchronization] Worker 4 conclui a fase 2 e aguarda na barreira.
+[Barrier Synchronization] Fase 2 concluída; todos os workers avançam em conjunto.
+[Barrier Synchronization] Fase 3: os workers iniciam processamento.
+[Barrier Synchronization] Worker 1 conclui a fase 3 e aguarda na barreira.
+[Barrier Synchronization] Worker 2 conclui a fase 3 e aguarda na barreira.
+[Barrier Synchronization] Worker 3 conclui a fase 3 e aguarda na barreira.
+[Barrier Synchronization] Worker 4 conclui a fase 3 e aguarda na barreira.
+[Barrier Synchronization] Fase 3 concluída; todos os workers avançam em conjunto.
+[Barrier Synchronization] A sincronização por fase foi mantida até ao fim.
+[Barrier Synchronization] Configurações excessivas aumentam o tempo total de execução.
+[Barrier Synchronization] Cenário concluído.

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from tkinter import ttk
 from typing import Callable
+import re
 
 try:
     from .backend_bridge import BackendBridge, BackendBridgeError, FrontendMetadata
@@ -147,6 +148,22 @@ class SimulatorStartView(tk.Tk):
         self.configure(bg="#101827")
         self.geometry("960x560")
         self.minsize(760, 460)
+        # start in fullscreen and bind resize handling
+        try:
+            self.attributes("-fullscreen", True)
+        except Exception:
+            # fallback to maximized window on platforms that don't support fullscreen
+            try:
+                self.state("zoomed")
+            except Exception:
+                pass
+
+        # allow toggling fullscreen and exiting via keys
+        self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
+        self.bind("<F11>", lambda e: self.attributes("-fullscreen", not self.attributes().get("-fullscreen", False)))
+
+        # adjust wraplengths and canvas when window size changes
+        self.bind("<Configure>", self._on_resize)
 
         self._configure_style()
         self._build_layout()
@@ -180,6 +197,18 @@ class SimulatorStartView(tk.Tk):
             padding=(22, 12),
             background="#0f766e",
             foreground="#ffffff",
+        )
+        style.configure(
+            "StartLarge.TButton",
+            font=("Segoe UI", 16, "bold"),
+            padding=(30, 16),
+            background="#0f766e",
+            foreground="#ffffff",
+        )
+        style.map(
+            "StartLarge.TButton",
+            background=[("active", "#115e59"), ("pressed", "#134e4a")],
+            foreground=[("disabled", "#d1d5db")],
         )
         style.configure(
             "MenuButton.TButton",
@@ -227,6 +256,39 @@ class SimulatorStartView(tk.Tk):
         self._metadata = metadata
         if self._current_view is not None and hasattr(self._current_view, "set_metadata"):
             self._current_view.set_metadata(metadata)
+
+    def _on_resize(self, event) -> None:
+        # update style wraplengths to adapt labels to new width
+        try:
+            new_width = max(300, event.width - 120)
+        except Exception:
+            return
+
+        style = ttk.Style(self)
+        style.configure("Title.TLabel", wraplength=new_width)
+        style.configure("MenuTitle.TLabel", wraplength=max(200, new_width - 120))
+
+        # recursively update label widgets in current view
+        if self._current_view is not None:
+            self._update_widget_wrap(self._current_view, new_width)
+
+            # if current view provides a buffer update, call it so canvas redraws to new size
+            if hasattr(self._current_view, "_update_buffer_visualization"):
+                try:
+                    self._current_view._update_buffer_visualization()
+                except Exception:
+                    pass
+
+    def _update_widget_wrap(self, widget: tk.Widget, wraplength: int) -> None:
+        # update labels' wraplength; descend into children recursively
+        try:
+            if isinstance(widget, (ttk.Label, tk.Label)):
+                widget.configure(wraplength=wraplength)
+        except Exception:
+            pass
+
+        for child in widget.winfo_children():
+            self._update_widget_wrap(child, wraplength)
 
     def _on_start(self) -> None:
         if self._metadata is None:
@@ -313,7 +375,9 @@ class SimulatorStartView(tk.Tk):
         self._show_view(
             ScenarioRunView(
                 self._view_container,
+                scenario_key,
                 definition,
+                ordered_values,
                 execution_result.logs,
                 execution_result.log_path,
                 execution_result.summary,
@@ -342,9 +406,18 @@ class StartView(ttk.Frame):
         self.rowconfigure(1, weight=2)
 
         self._title_label = ttk.Label(self, style="Title.TLabel")
+        # Ensure title is rendered on a single line
+        try:
+            self._title_label.configure(wraplength=2000)
+        except Exception:
+            pass
         self._title_label.grid(row=0, column=0, sticky="", pady=(44, 0))
-
-        self._start_button = ttk.Button(self, style="Start.TButton", command=self._on_start)
+        self._start_button = ttk.Button(self, style="StartLarge.TButton", command=self._on_start)
+        # make the button wider for prominence
+        try:
+            self._start_button.configure(width=20)
+        except Exception:
+            pass
         self._start_button.grid(row=1, column=0, sticky="s", pady=(0, 68))
 
     def set_metadata(self, metadata: FrontendMetadata | None) -> None:
@@ -745,14 +818,18 @@ class ScenarioRunView(ttk.Frame):
     def __init__(
         self,
         owner: ttk.Frame,
+        scenario_key: str,
         definition: ScenarioDefinition,
+        scenario_values: list[int],
         logs: list[str],
         log_path: str,
         summary: str,
         on_main_menu: Callable[[], None],
     ) -> None:
         super().__init__(owner, style="MenuCard.TFrame", padding=(42, 36))
+        self._scenario_key = scenario_key
         self._definition = definition
+        self._scenario_values = scenario_values
         self._logs = logs
         self._log_path = log_path
         self._on_main_menu = on_main_menu
@@ -793,6 +870,21 @@ class ScenarioRunView(ttk.Frame):
         )
         self._log_label.grid(row=0, column=0, sticky="nsew")
 
+        # Buffer visualization moved inside log_card (higher on screen)
+        self._buffer_frame = ttk.Frame(log_card, style="MenuCard.TFrame", padding=(6, 6))
+        self._buffer_frame.grid(row=1, column=0, sticky="ew", pady=(12, 6))
+        self._buffer_frame.columnconfigure(0, weight=1)
+
+        # make the canvas slightly taller to improve visibility
+        self._buffer_canvas = tk.Canvas(
+            self._buffer_frame,
+            height=36,
+            bg="#0b1220",
+            highlightthickness=1,
+            highlightbackground="#334155",
+        )
+        self._buffer_canvas.grid(row=0, column=0, sticky="ew")
+
         self._status_label = ttk.Label(
             self,
             textvariable=self._status_var,
@@ -800,7 +892,7 @@ class ScenarioRunView(ttk.Frame):
             font=("Segoe UI", 10),
             wraplength=760,
         )
-        self._status_label.grid(row=2, column=0, sticky="n", pady=(16, 10))
+        self._status_label.grid(row=2, column=0, sticky="n", pady=(6, 10))
 
         path_label = ttk.Label(
             self,
@@ -863,6 +955,9 @@ class ScenarioRunView(ttk.Frame):
         else:
             self._next_button.state(["!disabled"])
 
+        # update buffer visualization based on current log index
+        self._update_buffer_visualization()
+
     def _previous_log(self) -> None:
         if self._finished or self._index == 0:
             return
@@ -881,6 +976,93 @@ class ScenarioRunView(ttk.Frame):
             self._finished = True
 
         self._refresh_navigation()
+
+    def _update_buffer_visualization(self) -> None:
+        occupied, maximum, label = self._compute_buffer_state()
+        if maximum <= 0:
+            percent = 0.0
+        else:
+            percent = max(0.0, min(1.0, occupied / maximum))
+
+        canvas = self._buffer_canvas
+        canvas.delete("all")
+        w = canvas.winfo_width() or canvas.winfo_reqwidth() or 640
+        h = int(canvas['height'])
+        padding = 2
+
+        # background bar
+        canvas.create_rectangle(padding, padding, w - padding, h - padding, outline="#334155", fill="#071322")
+
+        # filled portion (green)
+        fill_w = padding + int((w - 2 * padding) * percent)
+        if percent > 0:
+            canvas.create_rectangle(padding, padding, fill_w, h - padding, outline="", fill="#16a34a")
+
+        # label
+        canvas.create_text(w // 2, h // 2, text=f"{label}: {int(percent * 100)}%", fill="#f8fafc", font=("Segoe UI", 10, "bold"))
+
+    def _compute_buffer_state(self) -> tuple[int, int, str]:
+        """Compute occupied slots and maximum for the buffer visualization.
+
+        This inspects the logs up to the current index and applies a scenario-specific
+        heuristic to infer occupancy.
+        """
+        logs_up_to = self._logs[: self._index + 1]
+        key = self._scenario_key
+
+        if key == "producer_consumer":
+            # find buffer size from scenario values (3rd param)
+            try:
+                buffer_size = int(self._scenario_values[2])
+            except Exception:
+                buffer_size = 1
+
+            produced_marks = sum(1 for l in logs_up_to if "BUFFER: produtor" in l)
+            consumed_marks = sum(1 for l in logs_up_to if "BUFFER: consumidor" in l)
+            # occupancy is produced - consumed, but cannot exceed buffer_size
+            occupied = max(0, min(buffer_size, produced_marks - consumed_marks))
+            return occupied, buffer_size, "Buffer"
+
+        if key == "readers_writers":
+            # show active readers relative to total readers (param 0)
+            try:
+                total_readers = int(self._scenario_values[0])
+            except Exception:
+                total_readers = 1
+
+            enters = [l for l in logs_up_to if "Leitor" in l and "entra na iteração" in l]
+            # approximate distinct active readers by recent enters not yet balanced by concludes
+            completes = [l for l in logs_up_to if "concluiu" in l and "Leitor" in l]
+            occupied = max(0, len(enters) - len(completes))
+            occupied = min(occupied, total_readers)
+            return occupied, total_readers, "Leitores ativos"
+
+        if key == "dining_philosophers":
+            try:
+                philosophers = int(self._scenario_values[0])
+            except Exception:
+                philosophers = 1
+
+            trying = sum(1 for l in logs_up_to if "tenta recolher os garfos" in l)
+            finished = sum(1 for l in logs_up_to if "completa a ronda" in l)
+            occupied = max(0, min(philosophers, trying - finished))
+            return occupied, philosophers, "A comer"
+
+        # barrier_synchronization: show workers waiting at barrier in current phase
+        if key == "barrier_synchronization":
+            try:
+                workers = int(self._scenario_values[0])
+            except Exception:
+                workers = 1
+
+            waiting = sum(1 for l in logs_up_to if "aguarda na barreira" in l)
+            # when phase completes, a summary line appears; we subtract completed phases
+            completed_phase_markers = sum(1 for l in logs_up_to if "Fase" in l and "concluída" in l)
+            occupied = max(0, min(workers, waiting - completed_phase_markers))
+            return occupied, workers, "Workers na barreira"
+
+        # default: no buffer-like metric
+        return 0, 1, "Estado"
 
 
 class ScenarioExecutionErrorView(ttk.Frame):
