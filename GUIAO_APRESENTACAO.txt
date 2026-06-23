@@ -1,0 +1,79 @@
+GUIAO DE APRESENTACAO - PROJETO DE PROGRAMACAO CONCORRENTE
+
+1. EM QUE CONSISTE O PROJETO
+
+Este projeto consiste num simulador interativo de programação concorrente, desenvolvido em C# com um frontend em Python.
+A aplicação foi pensada para demonstrar, de forma visual e pedagógica, varios problemas classicos de concorrencia.
+O utilizador pode configurar os parametros de cada cenario e observar, atraves de logs e da interface grafica, como as threads se organizam, esperam, partilham recursos e terminam a execução.
+
+O objetivo principal do projeto e mostrar conceitos fundamentais como exclusao mutua, sincronização, acesso concorrente a recursos partilhados, espera em barreiras e risco de deadlock ou starvation.
+Em vez de ser apenas teoria, o projeto transforma esses conceitos em cenarios observaveis e mais faceis de compreender.
+
+Na arquitetura geral, existe um backend em C# que gera a simulacao e regista os acontecimentos, e um frontend em Python que apresenta os cenarios, os parametros e a navegacao pelos logs.
+Isto permite separar a logica de simulacao da interface de apresentação.
+
+2. CENARIOS IMPLEMENTADOS
+
+O projeto inclui quatro cenarios principais.
+
+O primeiro e o Producer-Consumer.
+Neste cenario, varios produtores criam itens e varios consumidores removem esses itens de um buffer limitado.
+Serve para demonstrar o funcionamento de recursos partilhados com capacidade finita e a necessidade de controlar acesso ao buffer.
+
+O segundo e o Readers-Writers.
+Aqui, varios leitores podem aceder ao mesmo valor em simultaneo, mas os escritores precisam de acesso exclusivo para atualizar esse valor.
+Este cenario mostra bem o equilibrio entre concorrencia e exclusao mutua.
+
+O terceiro e o Dining Philosophers.
+Neste problema, varios filosofos partilham garfos e precisam de dois garfos para comer.
+O cenario demonstra o risco de deadlock e a importancia de estrategias de ordem de acesso para evitar bloqueios circulares.
+
+O quarto e o Barrier Synchronization.
+Neste caso, varias threads de trabalho executam fases e, no fim de cada fase, todas têm de esperar pelas restantes antes de avançar.
+Este cenario e util para mostrar sincronização por fases e coordenação coletiva entre threads.
+
+3. FUNCIONAMENTO DOS LOGS
+
+Os logs sao uma das partes mais importantes da aplicacao, porque permitem acompanhar o comportamento da simulacao passo a passo.
+Cada cenario gera um ficheiro de log na pasta logs, com timestamp no nome, para que cada execucao fique registada separadamente.
+
+Os logs incluem informacao como parametros escolhidos, inicio e fim do cenario, acoes de cada thread, momentos de espera e eventos de sincronizacao.
+Isto torna possivel perceber a ordem real dos acontecimentos e identificar quando uma thread esta a produzir, consumir, ler, escrever, esperar por um recurso ou ultrapassar uma barreira.
+
+No frontend, os logs podem ser vistos de forma guiada, linha a linha, o que ajuda na apresentacao e na analise da execução.
+Tambem existe uma pequena visualizacao no cenario Readers-Writers para destacar o estado do valor partilhado e a percentagem de leitores ativos.
+
+Em termos praticos, os logs servem para duas coisas: primeiro, para demonstrar o comportamento concorrente; segundo, para auditar e interpretar o que aconteceu durante a execução.
+
+4. TOLERANCIA A FALHAS
+
+A aplicacao inclui varias medidas de tolerancia a falhas e validacao de entradas.
+Antes de iniciar cada cenario, os parametros sao validados para evitar configuracoes invalidas, como zero produtores, zero consumidores, zero leitores, zero escritores ou um numero de filosofos inferior a tres.
+
+Quando a configuracao e aceitavel mas arriscada, o sistema apresenta avisos em vez de falhar imediatamente.
+Exemplos disso sao demasiadas threads, desbalanceamento entre leitores e escritores ou numero excessivo de filosofos e rondas.
+Isto ajuda a prevenir problemas de desempenho, starvation ou execucoes muito lentas.
+
+Outro ponto importante e o tratamento de falhas no acesso a ficheiros de log.
+Se a pasta de logs nao puder ser criada no local habitual, a aplicacao pode recorrer a um diretorio alternativo.
+Assim, evita-se que uma falha de I/O impeça completamente a execução do cenario.
+
+Tambem existe protecao contra erros de execução relacionados com recursos do sistema, como limites de threads ou configuracoes demasiado pesadas.
+No geral, a ideia e fazer com que o sistema seja robusto e que o utilizador seja avisado antes de surgir um problema grave.
+
+5. ANALISE DE DESEMPENHO
+
+A analise de desempenho neste projeto deve ser entendida em termos de concorrencia, quantidade de logs e impacto dos parametros escolhidos.
+Quanto maior for o numero de threads e de iteracoes, maior sera o volume de eventos gerados e maior sera o tempo necessario para concluir a simulacao.
+
+No Producer-Consumer, buffers pequenos tendem a aumentar a espera dos produtores, enquanto buffers muito grandes podem esconder o comportamento concorrente e gastar mais memoria.
+No Readers-Writers, muitos leitores aumentam a concorrencia de leitura, mas tambem podem atrasar escritores e provocar starvation se a configuracao for desbalanceada.
+No Dining Philosophers, o crescimento do numero de filosofos aumenta a contenção pelos garfos e pode elevar o risco de espera excessiva.
+Na Barrier Synchronization, mais workers e mais fases significam mais sincronizações e, por isso, mais tempo total de execução.
+
+A nivel geral, o projeto mostra que desempenho em concorrencia nao depende apenas de executar mais threads.
+Depende tambem de como os recursos sao partilhados, de quanto tempo cada thread permanece em secção critica e da forma como a aplicacao evita bloqueios desnecessarios.
+
+Em conclusao, o projeto e forte tanto do ponto de vista pedagógico como tecnico, porque permite observar os conceitos de concorrencia com detalhe, experimentar diferentes configuracoes e interpretar o impacto real das decisoes de sincronização no comportamento e no desempenho do sistema.
+
+FIM DO GUIAO

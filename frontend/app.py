@@ -46,6 +46,28 @@ SCENARIO_DEFINITIONS = {
             "- Muitos produtores ou consumidores aumentam bastante o volume de logs e tornam a execução mais demorada."
         ),
     ),
+    "producer_consumer": ScenarioDefinition(
+        title="Producer-Consumer",
+        description="Defina os parâmetros do cenário Producer-Consumer.",
+        fields=(
+            ScenarioFieldSpec("Número de produtores", 2),
+            ScenarioFieldSpec("Número de consumidores", 2),
+            ScenarioFieldSpec("Tamanho do buffer", 5),
+            ScenarioFieldSpec("Items por produtor", 10),
+        ),
+        tips=(
+            "Conselhos:\n"
+            "- Valores equilibrados entre produtores e consumidores (por exemplo 2 e 2) ajudam a observar melhor a alternância.\n"
+            "- Um buffer muito pequeno provoca bloqueios frequentes; os produtores ficam à espera com mais frequência.\n"
+            "- Um buffer muito elevado reduz bloqueios, mas pode esconder o comportamento concorrente que se pretende estudar.\n"
+            "- Muitos produtores ou consumidores aumentam bastante o volume de logs e tornam a execução mais demorada.\n\n"
+            "Contexto:\n"
+            "- Produtores: threads que geram itens e os colocam num buffer partilhado.\n"
+            "- Consumidores: threads que retiram itens do buffer para processar.\n"
+            "- O buffer serve como amortecedor entre taxas diferentes; é tipicamente protegido por semáforos ou variáveis de condição.\n"
+            "- Observa o efeito quando produtores são mais rápidos que consumidores (buffer enche) ou o contrário (buffer esvazia)."
+        ),
+    ),
     "readers_writers": ScenarioDefinition(
         title="Readers-Writers",
         description="Defina os parâmetros do cenário Readers-Writers.",
@@ -62,6 +84,27 @@ SCENARIO_DEFINITIONS = {
             "- Iterações demasiado altas produzem logs extensos e a execução fica mais lenta."
         ),
     ),
+    "readers_writers": ScenarioDefinition(
+        title="Readers-Writers",
+        description="Defina os parâmetros do cenário Readers-Writers.",
+        fields=(
+            ScenarioFieldSpec("Número de leitores", 3),
+            ScenarioFieldSpec("Número de escritores", 2),
+            ScenarioFieldSpec("Iterações por thread", 5),
+        ),
+        tips=(
+            "Conselhos:\n"
+            "- Uma configuração equilibrada, como 3 leitores e 2 escritores, mostra bem o padrão clássico do problema.\n"
+            "- Muitos escritores fazem o recurso partilhado ficar mais tempo bloqueado, reduzindo a perceção de paralelismo.\n"
+            "- Muitos leitores aumentam a concorrência, mas também podem prolongar a fila de espera dos escritores.\n"
+            "- Iterações demasiado altas produzem logs extensos e a execução fica mais lenta.\n\n"
+            "Contexto:\n"
+            "- Readers (leitores) podem aceder ao recurso partilhado concorrentemente quando não há escritores ativos.\n"
+            "- Writers (escritores) requerem acesso exclusivo para garantir consistência dos dados.\n"
+            "- Estratégias comuns: preferência ao leitor, preferência ao escritor ou políticas justas que equilibram ambas.\n"
+            "- Em implementações reais, leitores libertam o bloqueio quando não estão a ler — permanecer 'ativos' sem ler não é desejável."
+        ),
+    ),
     "dining_philosophers": ScenarioDefinition(
         title="Dining Philosophers",
         description="Defina os parâmetros do cenário Dining Philosophers.",
@@ -75,6 +118,26 @@ SCENARIO_DEFINITIONS = {
             "- Valores perto de 5 filósofos são bons para observar o padrão clássico sem sobrecarregar demasiado os logs.\n"
             "- Muitíssimos filósofos aumentam a contenção pelos garfos e fazem a simulação demorar mais.\n"
             "- Rondas muito elevadas geram muita repetição e tornam a análise mais pesada."
+        ),
+    ),
+    "dining_philosophers": ScenarioDefinition(
+        title="Dining Philosophers",
+        description="Defina os parâmetros do cenário Dining Philosophers.",
+        fields=(
+            ScenarioFieldSpec("Número de filósofos", 5, minimum=3),
+            ScenarioFieldSpec("Rondas por filósofo", 4),
+        ),
+        tips=(
+            "Conselhos:\n"
+            "- O mínimo recomendado é 3 filósofos; com menos do que isso o cenário deixa de ser representativo.\n"
+            "- Valores perto de 5 filósofos são bons para observar o padrão clássico sem sobrecarregar demasiado os logs.\n"
+            "- Muitíssimos filósofos aumentam a contenção pelos garfos e fazem a simulação demorar mais.\n"
+            "- Rondas muito elevadas geram muita repetição e tornam a análise mais pesada.\n\n"
+            "Contexto:\n"
+            "- Cada 'filósofo' é uma thread que alterna entre pensar e comer.\n"
+            "- Os 'garfos' são recursos partilhados entre filósofos vizinhos; para comer é preciso adquirir os dois garfos adjacentes.\n"
+            "- Um deadlock clássico ocorre se cada filósofo pega num garfo e espera infinitamente pelo outro.\n"
+            "- Soluções típicas: impor ordem global nos recursos, permitir que um filósofo pegue garfos em ordem invertida (odd/even), ou usar um árbitro (butler) que limita quem pode tentar comer."
         ),
     ),
     "barrier_synchronization": ScenarioDefinition(
@@ -875,6 +938,16 @@ class ScenarioRunView(ttk.Frame):
         self._buffer_frame.grid(row=1, column=0, sticky="ew", pady=(12, 6))
         self._buffer_frame.columnconfigure(0, weight=1)
 
+        # small label above the bar to show the last written value (readers_writers only)
+        self._buffer_box_label = ttk.Label(
+            self._buffer_frame,
+            text="",
+            style="MenuTitle.TLabel",
+            font=("Segoe UI", 9),
+            anchor="center",
+        )
+        self._buffer_box_label.grid(row=0, column=0, sticky="ew", pady=(0, 4))
+
         # make the canvas slightly taller to improve visibility
         self._buffer_canvas = tk.Canvas(
             self._buffer_frame,
@@ -883,7 +956,7 @@ class ScenarioRunView(ttk.Frame):
             highlightthickness=1,
             highlightbackground="#334155",
         )
-        self._buffer_canvas.grid(row=0, column=0, sticky="ew")
+        self._buffer_canvas.grid(row=1, column=0, sticky="ew")
 
         self._status_label = ttk.Label(
             self,
@@ -990,8 +1063,45 @@ class ScenarioRunView(ttk.Frame):
         h = int(canvas['height'])
         padding = 2
 
+        # precompute logs slice and approximate shared value for readers_writers
+        logs_up_to = self._logs[: self._index + 1]
+        shared_value = None
+        if self._scenario_key == "readers_writers":
+            initial = 0
+            for l in logs_up_to:
+                m = re.search(r"começa no estado inicial\s*(\d+)", l)
+                if m:
+                    try:
+                        initial = int(m.group(1))
+                    except Exception:
+                        initial = 0
+                    break
+            update_indices = [i for i, l in enumerate(logs_up_to) if "atualiza o valor partilhado" in l]
+            shared_value = initial + len(update_indices)
+
         # background bar
-        canvas.create_rectangle(padding, padding, w - padding, h - padding, outline="#334155", fill="#071322")
+        # for readers_writers we may highlight when a writer is actively updating
+        outline_col = "#334155"
+        if self._scenario_key == "readers_writers":
+            # detect if current log entry is a writer update
+            current_line = self._logs[self._index] if 0 <= self._index < len(self._logs) else ""
+            if "atualiza o valor partilhado" in current_line:
+                outline_col = "#f97316"
+
+        canvas.create_rectangle(padding, padding, w - padding, h - padding, outline=outline_col, fill="#071322")
+
+        # update the external box label (above the bar) for readers_writers
+        if self._scenario_key == "readers_writers":
+            if shared_value is not None:
+                try:
+                    self._buffer_box_label.config(text=f"Último escrito: {shared_value}")
+                except Exception:
+                    pass
+            else:
+                try:
+                    self._buffer_box_label.config(text="")
+                except Exception:
+                    pass
 
         # filled portion (green)
         fill_w = padding + int((w - 2 * padding) * percent)
@@ -999,7 +1109,38 @@ class ScenarioRunView(ttk.Frame):
             canvas.create_rectangle(padding, padding, fill_w, h - padding, outline="", fill="#16a34a")
 
         # label
-        canvas.create_text(w // 2, h // 2, text=f"{label}: {int(percent * 100)}%", fill="#f8fafc", font=("Segoe UI", 10, "bold"))
+        canvas.create_text(w // 2, h // 2 - 6, text=f"{label}: {int(percent * 100)}%", fill="#f8fafc", font=("Segoe UI", 10, "bold"))
+
+        # For the readers-writers scenario, show the shared value and writer indicator
+        if self._scenario_key == "readers_writers":
+            logs_up_to = self._logs[: self._index + 1]
+
+            # initial value from logs (if present)
+            initial = 0
+            for l in logs_up_to:
+                m = re.search(r"começa no estado inicial\s*(\d+)", l)
+                if m:
+                    try:
+                        initial = int(m.group(1))
+                    except Exception:
+                        initial = 0
+                    break
+
+            # count writer updates to approximate current shared value
+            update_indices = [i for i, l in enumerate(logs_up_to) if "atualiza o valor partilhado" in l]
+            shared_value = initial + len(update_indices)
+
+            # determine if any writer is waiting after the last update
+            last_update_idx = update_indices[-1] if update_indices else -1
+            waiting_exists = any(
+                i > last_update_idx and "aguarda acesso exclusivo" in l and "Escritor" in l
+                for i, l in enumerate(logs_up_to)
+            )
+
+            # indicate waiting writer with a small dot on the bar
+            if waiting_exists:
+                r = 6
+                canvas.create_oval(w - 2 * r - 6, h // 2 - r, w - 6, h // 2 + r, fill="#f43f5e", outline="")
 
     def _compute_buffer_state(self) -> tuple[int, int, str]:
         """Compute occupied slots and maximum for the buffer visualization.
@@ -1031,8 +1172,15 @@ class ScenarioRunView(ttk.Frame):
                 total_readers = 1
 
             enters = [l for l in logs_up_to if "Leitor" in l and "entra na iteração" in l]
-            # approximate distinct active readers by recent enters not yet balanced by concludes
-            completes = [l for l in logs_up_to if "concluiu" in l and "Leitor" in l]
+            # approximate distinct active readers by recent enters not yet balanced by completes
+            # treat either an explicit 'concluiu' marker or the 'lê o valor disponível' message
+            # as a completion of the reader's critical section (some log versions use one or the other)
+            completes = [
+                l
+                for l in logs_up_to
+                if ("concluiu" in l and "Leitor" in l)
+                or ("lê o valor disponível" in l and "Leitor" in l)
+            ]
             occupied = max(0, len(enters) - len(completes))
             occupied = min(occupied, total_readers)
             return occupied, total_readers, "Leitores ativos"
@@ -1055,10 +1203,19 @@ class ScenarioRunView(ttk.Frame):
             except Exception:
                 workers = 1
 
-            waiting = sum(1 for l in logs_up_to if "aguarda na barreira" in l)
-            # when phase completes, a summary line appears; we subtract completed phases
-            completed_phase_markers = sum(1 for l in logs_up_to if "Fase" in l and "concluída" in l)
-            occupied = max(0, min(workers, waiting - completed_phase_markers))
+            # count waiting entries that belong to the current phase only
+            # find last completed-phase marker index (if any) and count 'aguarda na barreira'
+            last_completed_idx = -1
+            for i, l in enumerate(logs_up_to):
+                if "Fase" in l and "concluída" in l:
+                    last_completed_idx = i
+
+            if last_completed_idx == -1:
+                waiting = sum(1 for l in logs_up_to if "aguarda na barreira" in l)
+            else:
+                waiting = sum(1 for l in logs_up_to[last_completed_idx + 1 :] if "aguarda na barreira" in l)
+
+            occupied = max(0, min(workers, waiting))
             return occupied, workers, "Workers na barreira"
 
         # default: no buffer-like metric

@@ -169,12 +169,6 @@ Estes erros têm impacto menor. Implementação futura se necessário.
 - **Razão**: Seria necessário monitoramento de arquivo
 - **Prioridade**: Muito Baixa
 
-### 23. ❌ **Ctrl+C (Interrupção do Programa)**
-- **Implementação**: Não realizada
-- **Razão**: .NET trata naturalmente via `CancelKeyPress`
-- **Prioridade**: Muito Baixa
-
----
 
 ## 🛠️ Implementação Técnica Detalhada
 
